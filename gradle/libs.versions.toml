@@ -1,0 +1,6 @@
+[libraries]
+jspecify = "org.jspecify:jspecify:1.0.0"
+jetbrains-annotations = "org.jetbrains:annotations:26.0.2"
+
+[plugins]
+indra = { id = "net.kyori.indra", version = "3.2.0" }
