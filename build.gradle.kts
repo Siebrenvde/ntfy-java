@@ -23,6 +23,30 @@ publishing {
     publications {
         create<MavenPublication>("maven") {
             from(components["java"])
+            pom {
+                name = project.name
+                url = "https://github.com/Siebrenvde/ntfy-java"
+                licenses {
+                    license {
+                        name = "The MIT License"
+                        url = "https://opensource.org/licenses/MIT"
+                    }
+                }
+                developers {
+                    developer {
+                        id = "siebrenvde"
+                        name = "Siebrenvde"
+                        email = "siebren@siebrenvde.dev"
+                        url = "https://siebrenvde.dev"
+                        timezone = "Europe/Brussels"
+                    }
+                }
+                scm {
+                    connection = "scm:git:https://github.com/Siebrenvde/ntfy-java.git"
+                    developerConnection = "scm:git:ssh://git@github.com/Siebrenvde/ntfy-java.git"
+                    url = "https://github.com/Siebrenvde/ntfy-java"
+                }
+            }
         }
 
         repositories.maven {
@@ -32,4 +56,12 @@ publishing {
             credentials(PasswordCredentials::class)
         }
     }
+}
+
+tasks.javadoc.configure {
+    val options = options as StandardJavadocDocletOptions
+    options.links(
+        "https://jspecify.dev/docs/api/",
+        "https://javadoc.io/doc/org.jetbrains/annotations/${libs.jetbrains.annotations.get().version}/"
+    )
 }
