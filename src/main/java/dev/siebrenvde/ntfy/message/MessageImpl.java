@@ -3,6 +3,7 @@ package dev.siebrenvde.ntfy.message;
 import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static dev.siebrenvde.ntfy.Util.checkArgument;
@@ -11,7 +12,7 @@ record MessageImpl(
     @Nullable String body,
     @Nullable String title,
     Priority priority,
-    String[] tags,
+    List<String> tags,
     boolean markdown
 ) implements Message {
 
@@ -51,6 +52,12 @@ record MessageImpl(
         }
 
         @Override
+        public Builder tags(List<String> tags) {
+            this.tags = new ArrayList<>(tags);
+            return this;
+        }
+
+        @Override
         public Builder addTag(String tag) {
             checkArgument(tag != null, "tag cannot be null");
             this.tags.add(tag);
@@ -69,7 +76,7 @@ record MessageImpl(
                 body,
                 title,
                 priority,
-                tags.toArray(new String[0]),
+                Collections.unmodifiableList(tags),
                 markdown
             );
         }

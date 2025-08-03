@@ -3,6 +3,8 @@ package dev.siebrenvde.ntfy.message;
 import org.jetbrains.annotations.Contract;
 import org.jspecify.annotations.Nullable;
 
+import java.util.List;
+
 /**
  * Represents a message to be published
  */
@@ -58,11 +60,11 @@ public sealed interface Message permits MessageImpl {
     Priority priority();
 
     /**
-     * {@return an array of tags}
+     * {@return a list of tags}
      * @see <a href="https://docs.ntfy.sh/publish/#tags-emojis">Tags &amp; emojis</a>
      */
     @Contract(pure = true)
-    String[] tags();
+    List<String> tags();
 
     /**
      * {@return whether the body should be interpreted as Markdown}
@@ -110,6 +112,15 @@ public sealed interface Message permits MessageImpl {
          */
         @Contract(value = "_ -> this", mutates = "this")
         Builder tags(String... tags);
+
+        /**
+         * Sets all tags, overwriting any previously set tags
+         * @param tags the tags
+         * @return the builder
+         * @see <a href="https://docs.ntfy.sh/publish/#tags-emojis">Tags &amp; emojis</a>
+         */
+        @Contract(value = "_ -> this", mutates = "this")
+        Builder tags(List<String> tags);
 
         /**
          * Adds a tag

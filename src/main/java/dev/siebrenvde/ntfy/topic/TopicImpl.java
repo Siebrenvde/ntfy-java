@@ -85,7 +85,7 @@ class TopicImpl implements Topic {
             builder.header("Priority", message.priority().name());
         }
 
-        if (message.tags().length > 0) {
+        if (!message.tags().isEmpty()) {
             builder.header("Tags", String.join(",", message.tags()));
         }
 
