@@ -2,6 +2,10 @@ package dev.siebrenvde.ntfy.topic;
 
 import dev.siebrenvde.ntfy.message.Message;
 import dev.siebrenvde.ntfy.message.Priority;
+import dev.siebrenvde.ntfy.message.action.Action;
+import dev.siebrenvde.ntfy.message.action.BroadcastAction;
+import dev.siebrenvde.ntfy.message.action.HttpAction;
+import dev.siebrenvde.ntfy.message.action.ViewAction;
 import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
@@ -15,7 +19,11 @@ import java.net.http.HttpResponse;
 import java.net.http.HttpResponse.BodyHandlers;
 import java.time.Instant;
 import java.time.temporal.TemporalUnit;
+import java.util.ArrayList;
 import java.util.Base64;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static dev.siebrenvde.ntfy.Util.checkArgument;
 
@@ -93,6 +101,58 @@ class TopicImpl implements Topic {
             builder.header("Markdown", "true");
         }
 
+        if (!message.actions().isEmpty()) {
+            List<String> actions = new ArrayList<>();
+
+            for (Action action : message.actions()) {
+                Map<String, String> parts = new HashMap<>();
+
+                parts.put("action", action.action());
+                parts.put("label", action.label());
+                if (action.clear()) parts.put("clear", "true");
+
+                if (action instanceof ViewAction view) {
+                    parts.put("url", view.url());
+                }
+
+                else if (action instanceof BroadcastAction broadcast) {
+                  if (!broadcast.intent().equals(BroadcastAction.DEFAULT_INTENT)) {
+                      parts.put("intent", broadcast.intent());
+                  }
+
+                  if (!broadcast.extras().isEmpty()) {
+                      broadcast.extras().forEach((key, value) -> parts.put("extras." + key, value));
+                  }
+                }
+
+                else if (action instanceof HttpAction http) {
+                    parts.put("url", http.url());
+
+                    if (http.method() != HttpAction.DEFAULT_METHOD) {
+                        parts.put("method", http.method().name());
+                    }
+
+                    if (!http.headers().isEmpty()) {
+                        http.headers().forEach((header, value) -> parts.put("headers." + header, value));
+                    }
+
+                    if (http.body() != null) {
+                        parts.put("body", http.body());
+                    }
+                }
+
+                actions.add(String.join(
+                    ",",
+                    parts.entrySet().stream().map(entry -> {
+                        //noinspection CodeBlock2Expr
+                        return entry.getKey() + "=" + sanitiseAndWrap(entry.getValue());
+                    }).toList()
+                ));
+            }
+
+            builder.header("Actions", String.join(";", actions));
+        }
+
         if (time != null) {
             builder.header("Delay", String.valueOf(time.getEpochSecond()));
         }
@@ -108,6 +168,17 @@ class TopicImpl implements Topic {
         } catch (IOException | InterruptedException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private String sanitiseAndWrap(String input) {
+        if (input.contains(",") || input.contains(";") || input.contains("\"")) {
+            input = input.replace("\"", "\\\"");
+            input = "\"" + input + "\"";
+        }
+        if (input.contains("\n")) {
+            input = input.replace("\n", "\\n");
+        }
+        return input;
     }
 
     static class Secured extends TopicImpl {

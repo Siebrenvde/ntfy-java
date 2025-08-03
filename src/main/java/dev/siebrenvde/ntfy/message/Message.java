@@ -1,5 +1,6 @@
 package dev.siebrenvde.ntfy.message;
 
+import dev.siebrenvde.ntfy.message.action.Action;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Unmodifiable;
 import org.jspecify.annotations.Nullable;
@@ -64,9 +65,8 @@ public interface Message {
      * {@return a list of tags}
      * @see <a href="https://docs.ntfy.sh/publish/#tags-emojis">Tags &amp; emojis</a>
      */
-    @Unmodifiable
     @Contract(pure = true)
-    List<String> tags();
+    @Unmodifiable List<String> tags();
 
     /**
      * {@return whether the body should be interpreted as Markdown}
@@ -76,10 +76,17 @@ public interface Message {
     boolean markdown();
 
     /**
+     * {@return a list of actions}
+     * @see <a href="https://docs.ntfy.sh/publish/#action-buttons">Action buttons</a>
+     */
+    @Contract(pure = true)
+    @Unmodifiable List<Action> actions();
+
+    /**
      * Builder for {@link Message}
      */
     @SuppressWarnings("unused")
-    sealed interface Builder permits MessageImpl.BuilderImpl {
+    interface Builder {
 
         /**
          * Sets the message body
@@ -141,6 +148,33 @@ public interface Message {
          */
         @Contract(value = "_ -> this", mutates = "this")
         Builder markdown(boolean markdown);
+
+        /**
+         * Sets all actions, overwriting any previously set actions
+         * @param actions the actions
+         * @return the builder
+         * @see <a href="https://docs.ntfy.sh/publish/#action-buttons">Action buttons</a>
+         */
+        @Contract(value = "_ -> this", mutates = "this")
+        Builder actions(Action... actions);
+
+        /**
+         * Sets all actions, overwriting any previously set actions
+         * @param actions the actions
+         * @return the builder
+         * @see <a href="https://docs.ntfy.sh/publish/#action-buttons">Action buttons</a>
+         */
+        @Contract(value = "_ -> this", mutates = "this")
+        Builder actions(List<Action> actions);
+
+        /**
+         * Adds an action
+         * @param action the action
+         * @return the builder
+         * @see <a href="https://docs.ntfy.sh/publish/#action-buttons">Action buttons</a>
+         */
+        @Contract(value = "_ -> this", mutates = "this")
+        Builder addAction(Action action);
 
         /**
          * Builds the message

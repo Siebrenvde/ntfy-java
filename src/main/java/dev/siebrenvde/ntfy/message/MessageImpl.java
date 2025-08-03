@@ -1,5 +1,6 @@
 package dev.siebrenvde.ntfy.message;
 
+import dev.siebrenvde.ntfy.message.action.Action;
 import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -13,17 +14,19 @@ record MessageImpl(
     @Nullable String title,
     Priority priority,
     List<String> tags,
-    boolean markdown
+    boolean markdown,
+    List<Action> actions
 ) implements Message {
 
     @SuppressWarnings("ConstantValue")
-    static final class BuilderImpl implements MessageImpl.Builder {
+    static class BuilderImpl implements Message.Builder {
 
         private @Nullable String body;
         private @Nullable String title;
         private Priority priority = Priority.DEFAULT;
         private List<String> tags = new ArrayList<>();
         private boolean markdown = false;
+        private List<Action> actions = new ArrayList<>();
 
         @Override
         public Builder body(String body) {
@@ -71,13 +74,35 @@ record MessageImpl(
         }
 
         @Override
+        public Builder actions(Action... actions) {
+            checkArgument(actions != null, "actions cannot be null");
+            this.actions = new ArrayList<>(List.of(actions));
+            return this;
+        }
+
+        @Override
+        public Builder actions(List<Action> actions) {
+            checkArgument(actions != null, "actions cannot be null");
+            this.actions = new ArrayList<>(actions);
+            return this;
+        }
+
+        @Override
+        public Builder addAction(Action action) {
+            checkArgument(action != null, "action cannot be null");
+            this.actions.add(action);
+            return this;
+        }
+
+        @Override
         public Message build() {
             return new MessageImpl(
                 body,
                 title,
                 priority,
                 Collections.unmodifiableList(tags),
-                markdown
+                markdown,
+                Collections.unmodifiableList(actions)
             );
         }
 
