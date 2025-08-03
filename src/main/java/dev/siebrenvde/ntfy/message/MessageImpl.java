@@ -15,7 +15,8 @@ record MessageImpl(
     Priority priority,
     List<String> tags,
     boolean markdown,
-    List<Action> actions
+    List<Action> actions,
+    @Nullable String clickAction
 ) implements Message {
 
     @SuppressWarnings("ConstantValue")
@@ -27,6 +28,7 @@ record MessageImpl(
         private List<String> tags = new ArrayList<>();
         private boolean markdown = false;
         private List<Action> actions = new ArrayList<>();
+        private @Nullable String clickAction;
 
         @Override
         public Builder body(String body) {
@@ -95,6 +97,12 @@ record MessageImpl(
         }
 
         @Override
+        public Builder clickAction(String url) {
+            this.clickAction = url;
+            return this;
+        }
+
+        @Override
         public Message build() {
             return new MessageImpl(
                 body,
@@ -102,7 +110,8 @@ record MessageImpl(
                 priority,
                 Collections.unmodifiableList(tags),
                 markdown,
-                Collections.unmodifiableList(actions)
+                Collections.unmodifiableList(actions),
+                clickAction
             );
         }
 

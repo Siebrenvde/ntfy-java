@@ -83,6 +83,13 @@ public interface Message {
     @Unmodifiable List<Action> actions();
 
     /**
+     * {@return the click action}
+     * @see <a href="https://docs.ntfy.sh/publish/#click-action">Click action</a>
+     */
+    @Contract(pure = true)
+    @Nullable String clickAction();
+
+    /**
      * Builder for {@link Message}
      */
     @SuppressWarnings("unused")
@@ -175,6 +182,15 @@ public interface Message {
          */
         @Contract(value = "_ -> this", mutates = "this")
         Builder addAction(Action action);
+
+        /**
+         * Sets the click action
+         * @param url the url
+         * @return the builder
+         * @see <a href="https://docs.ntfy.sh/publish/#click-action">Click action</a>
+         */
+        @Contract(value = "_ -> this", mutates = "this")
+        Builder clickAction(String url);
 
         /**
          * Builds the message
