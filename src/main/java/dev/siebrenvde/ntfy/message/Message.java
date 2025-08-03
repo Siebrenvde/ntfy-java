@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * Represents a message to be published
  */
-public sealed interface Message permits MessageImpl {
+public interface Message {
 
     /**
      * Creates a new message builder
