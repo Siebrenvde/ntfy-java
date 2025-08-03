@@ -1,6 +1,7 @@
 package dev.siebrenvde.ntfy.message;
 
 import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.Unmodifiable;
 import org.jspecify.annotations.Nullable;
 
 import java.util.List;
@@ -63,6 +64,7 @@ public sealed interface Message permits MessageImpl {
      * {@return a list of tags}
      * @see <a href="https://docs.ntfy.sh/publish/#tags-emojis">Tags &amp; emojis</a>
      */
+    @Unmodifiable
     @Contract(pure = true)
     List<String> tags();
 
