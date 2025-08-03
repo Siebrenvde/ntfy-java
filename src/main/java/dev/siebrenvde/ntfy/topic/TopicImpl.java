@@ -1,6 +1,7 @@
 package dev.siebrenvde.ntfy.topic;
 
 import dev.siebrenvde.ntfy.message.Message;
+import dev.siebrenvde.ntfy.message.Priority;
 import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
@@ -80,7 +81,7 @@ class TopicImpl implements Topic {
             builder.header("Title", message.title());
         }
 
-        if (message.priority() != Message.Priority.DEFAULT) {
+        if (message.priority() != Priority.DEFAULT) {
             builder.header("Priority", message.priority().name());
         }
 

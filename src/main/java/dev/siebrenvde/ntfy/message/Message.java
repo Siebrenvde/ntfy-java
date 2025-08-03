@@ -72,18 +72,6 @@ public sealed interface Message permits MessageImpl {
     boolean markdown();
 
     /**
-     * An enum representing the available priority levels
-     * @see <a href="https://docs.ntfy.sh/publish/#message-priority">Message priority</a>
-     */
-    enum Priority {
-        MAX,
-        HIGH,
-        DEFAULT,
-        LOW,
-        MIN
-    }
-
-    /**
      * Builder for {@link Message}
      */
     @SuppressWarnings("unused")
