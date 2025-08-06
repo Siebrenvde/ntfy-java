@@ -19,7 +19,9 @@ record MessageImpl(
     @Nullable String clickAction,
     @Nullable String icon,
     @Nullable String email,
-    @Nullable String phone
+    @Nullable String phone,
+    boolean cache,
+    boolean firebase
 ) implements Message {
 
     @SuppressWarnings("ConstantValue")
@@ -35,6 +37,8 @@ record MessageImpl(
         private @Nullable String icon;
         private @Nullable String email;
         private @Nullable String phone;
+        private boolean cache = true;
+        private boolean firebase = true;
 
         @Override
         public Builder body(@Nullable String body) {
@@ -128,6 +132,18 @@ record MessageImpl(
         }
 
         @Override
+        public Builder cache(boolean cache) {
+            this.cache = cache;
+            return this;
+        }
+
+        @Override
+        public Builder firebase(boolean firebase) {
+            this.firebase = firebase;
+            return this;
+        }
+
+        @Override
         public Message build() {
             return new MessageImpl(
                 body,
@@ -139,7 +155,9 @@ record MessageImpl(
                 clickAction,
                 icon,
                 email,
-                phone
+                phone,
+                cache,
+                firebase
             );
         }
 

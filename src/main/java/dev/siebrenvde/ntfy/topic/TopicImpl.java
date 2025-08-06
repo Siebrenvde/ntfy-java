@@ -169,6 +169,14 @@ class TopicImpl implements Topic {
             builder.header("Call", message.phone());
         }
 
+        if (!message.cache()) {
+            builder.header("Cache", "no");
+        }
+
+        if (!message.firebase()) {
+            builder.header("Firebase", "no");
+        }
+
         if (time != null) {
             builder.header("Delay", String.valueOf(time.getEpochSecond()));
         }

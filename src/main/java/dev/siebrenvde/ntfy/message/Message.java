@@ -111,6 +111,20 @@ public interface Message {
     @Nullable String phone();
 
     /**
+     * {@return whether to cache this message on the server}
+     * @see <a href="https://docs.ntfy.sh/publish/#message-caching">Message caching</a>
+     */
+    @Contract(pure = true)
+    boolean cache();
+
+    /**
+     * {@return whether to forward this message to Firebase}
+     * @see <a href="https://docs.ntfy.sh/publish/#disable-firebase">Disable Firebase</a>
+     */
+    @Contract(pure = true)
+    boolean firebase();
+
+    /**
      * Builder for {@link Message}
      */
     @SuppressWarnings("unused")
@@ -243,6 +257,24 @@ public interface Message {
          */
         @Contract(value = "_ -> this", mutates = "this")
         Builder phone(@Nullable String phone);
+
+        /**
+         * Sets whether to cache the message on the server
+         * @param cache <code>false</code> to disable caching
+         * @return the builder
+         * @see <a href="https://docs.ntfy.sh/publish/#message-caching">Message caching</a>
+         */
+        @Contract(value = "_ -> this", mutates = "this")
+        Builder cache(boolean cache);
+
+        /**
+         * Sets whether to forward the message to Firebase
+         * @param firebase <code>false</code> to disable Firebase forwarding
+         * @return the builder
+         * @see <a href="https://docs.ntfy.sh/publish/#disable-firebase">Disable Firebase</a>
+         */
+        @Contract(value = "_ -> this", mutates = "this")
+        Builder firebase(boolean firebase);
 
         /**
          * Builds the message
