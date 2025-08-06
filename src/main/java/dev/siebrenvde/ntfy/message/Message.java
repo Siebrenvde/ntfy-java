@@ -108,7 +108,7 @@ public interface Message {
          * @return the builder
          */
         @Contract(value = "_ -> this", mutates = "this")
-        Builder body(String body);
+        Builder body(@Nullable String body);
 
         /**
          * Sets the message title
@@ -116,7 +116,7 @@ public interface Message {
          * @return the builder
          */
         @Contract(value = "_ -> this", mutates = "this")
-        Builder title(String title);
+        Builder title(@Nullable String title);
 
         /**
          * Sets the priority
@@ -197,7 +197,7 @@ public interface Message {
          * @see <a href="https://docs.ntfy.sh/publish/#click-action">Click action</a>
          */
         @Contract(value = "_ -> this", mutates = "this")
-        Builder clickAction(String url);
+        Builder clickAction(@Nullable String url);
 
         /**
          * Sets the icon
@@ -206,7 +206,7 @@ public interface Message {
          * @see <a href="https://docs.ntfy.sh/publish/#icons">Icons</a>
          */
         @Contract(value = "_ -> this", mutates = "this")
-        Builder icon(String url);
+        Builder icon(@Nullable String url);
 
         /**
          * Builds the message

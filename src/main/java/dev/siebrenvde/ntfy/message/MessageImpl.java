@@ -33,13 +33,13 @@ record MessageImpl(
         private @Nullable String icon;
 
         @Override
-        public Builder body(String body) {
+        public Builder body(@Nullable String body) {
             this.body = body;
             return this;
         }
 
         @Override
-        public Builder title(String title) {
+        public Builder title(@Nullable String title) {
             this.title = title;
             return this;
         }
@@ -100,13 +100,13 @@ record MessageImpl(
         }
 
         @Override
-        public Builder clickAction(String url) {
+        public Builder clickAction(@Nullable String url) {
             this.clickAction = url;
             return this;
         }
 
         @Override
-        public Builder icon(String url) {
+        public Builder icon(@Nullable String url) {
             this.icon = url;
             return this;
         }
