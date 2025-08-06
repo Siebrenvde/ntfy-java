@@ -90,6 +90,13 @@ public interface Message {
     @Nullable String clickAction();
 
     /**
+     * {@return the icon}
+     * @see <a href="https://docs.ntfy.sh/publish/#icons">Icons</a>
+     */
+    @Contract(pure = true)
+    @Nullable String icon();
+
+    /**
      * Builder for {@link Message}
      */
     @SuppressWarnings("unused")
@@ -191,6 +198,15 @@ public interface Message {
          */
         @Contract(value = "_ -> this", mutates = "this")
         Builder clickAction(String url);
+
+        /**
+         * Sets the icon
+         * @param url the url
+         * @return the builder
+         * @see <a href="https://docs.ntfy.sh/publish/#icons">Icons</a>
+         */
+        @Contract(value = "_ -> this", mutates = "this")
+        Builder icon(String url);
 
         /**
          * Builds the message

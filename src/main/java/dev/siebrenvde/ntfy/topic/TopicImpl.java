@@ -157,6 +157,10 @@ class TopicImpl implements Topic {
             builder.header("Click", message.clickAction());
         }
 
+        if (message.icon() != null) {
+            builder.header("Icon", message.icon());
+        }
+
         if (time != null) {
             builder.header("Delay", String.valueOf(time.getEpochSecond()));
         }
