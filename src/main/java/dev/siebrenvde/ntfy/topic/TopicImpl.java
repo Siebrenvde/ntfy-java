@@ -161,6 +161,14 @@ class TopicImpl implements Topic {
             builder.header("Icon", message.icon());
         }
 
+        if (message.email() != null) {
+            builder.header("Email", message.email());
+        }
+
+        if (message.phone() != null) {
+            builder.header("Call", message.phone());
+        }
+
         if (time != null) {
             builder.header("Delay", String.valueOf(time.getEpochSecond()));
         }

@@ -17,7 +17,9 @@ record MessageImpl(
     boolean markdown,
     List<Action> actions,
     @Nullable String clickAction,
-    @Nullable String icon
+    @Nullable String icon,
+    @Nullable String email,
+    @Nullable String phone
 ) implements Message {
 
     @SuppressWarnings("ConstantValue")
@@ -31,6 +33,8 @@ record MessageImpl(
         private List<Action> actions = new ArrayList<>();
         private @Nullable String clickAction;
         private @Nullable String icon;
+        private @Nullable String email;
+        private @Nullable String phone;
 
         @Override
         public Builder body(@Nullable String body) {
@@ -112,6 +116,18 @@ record MessageImpl(
         }
 
         @Override
+        public Builder email(@Nullable String email) {
+            this.email = email;
+            return this;
+        }
+
+        @Override
+        public Builder phone(@Nullable String phone) {
+            this.phone = phone;
+            return this;
+        }
+
+        @Override
         public Message build() {
             return new MessageImpl(
                 body,
@@ -121,7 +137,9 @@ record MessageImpl(
                 markdown,
                 Collections.unmodifiableList(actions),
                 clickAction,
-                icon
+                icon,
+                email,
+                phone
             );
         }
 

@@ -97,6 +97,20 @@ public interface Message {
     @Nullable String icon();
 
     /**
+     * {@return the email address this message will be forwarded to}
+     * @see <a href="https://docs.ntfy.sh/publish/#e-mail-notifications">E-mail notifications</a>
+     */
+    @Contract(pure = true)
+    @Nullable String email();
+
+    /**
+     * {@return the phone number to call, or 'yes' to use the first verified phone number}
+     * @see <a href="https://docs.ntfy.sh/publish/#phone-calls">Phone calls</a>
+     */
+    @Contract(pure = true)
+    @Nullable String phone();
+
+    /**
      * Builder for {@link Message}
      */
     @SuppressWarnings("unused")
@@ -207,6 +221,28 @@ public interface Message {
          */
         @Contract(value = "_ -> this", mutates = "this")
         Builder icon(@Nullable String url);
+
+        /**
+         * Sets the email address to forward the message to
+         * @param email the email address
+         * @return the builder
+         * @see <a href="https://docs.ntfy.sh/publish/#e-mail-notifications">E-mail notifications</a>
+         */
+        @Contract(value = "_ -> this", mutates = "this")
+        Builder email(@Nullable String email);
+
+        /**
+         * Sets the phone number to call
+         * <br>
+         * Should be prefixed with a plus sign and the country code
+         * <br>
+         * Set to 'yes' to use the first verified phone number
+         * @param phone the phone number
+         * @return the builder
+         * @see <a href="https://docs.ntfy.sh/publish/#phone-calls">Phone calls</a>
+         */
+        @Contract(value = "_ -> this", mutates = "this")
+        Builder phone(@Nullable String phone);
 
         /**
          * Builds the message
