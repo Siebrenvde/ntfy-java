@@ -60,6 +60,7 @@ record MessageImpl(
 
         @Override
         public Builder tags(List<String> tags) {
+            checkArgument(tags != null, "tags cannot be null");
             this.tags = new ArrayList<>(tags);
             return this;
         }
