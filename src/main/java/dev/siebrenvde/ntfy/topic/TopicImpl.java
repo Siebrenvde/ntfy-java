@@ -11,7 +11,6 @@ import dev.siebrenvde.ntfy.message.attachment.FileAttachment;
 import dev.siebrenvde.ntfy.message.attachment.UrlAttachment;
 import org.jspecify.annotations.Nullable;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URI;
@@ -65,22 +64,22 @@ class TopicImpl implements Topic {
     }
 
     @Override
-    public void publish(Message message) {
+    public void publish(Message message) throws IOException, InterruptedException {
         sendRequest(message, null);
     }
 
     @Override
-    public void scheduleAt(Message message, Instant time) {
+    public void scheduleAt(Message message, Instant time) throws IOException, InterruptedException {
         sendRequest(message, time);
     }
 
     @Override
-    public void scheduleIn(Message message, long delay, TemporalUnit unit) {
+    public void scheduleIn(Message message, long delay, TemporalUnit unit) throws IOException, InterruptedException {
         sendRequest(message, Instant.now().plus(delay, unit));
     }
 
     @SuppressWarnings("UastIncorrectHttpHeaderInspection")
-    private void sendRequest(Message message, @Nullable Instant time) {
+    private void sendRequest(Message message, @Nullable Instant time) throws IOException, InterruptedException {
         HttpRequest.Builder builder = HttpRequest.newBuilder(uri);
 
         if (message.body() != null) {
@@ -171,11 +170,7 @@ class TopicImpl implements Topic {
             }
 
             else if (attachment instanceof FileAttachment file) {
-                try {
-                    builder.PUT(BodyPublishers.ofFile(file.file()));
-                } catch (FileNotFoundException e) {
-                    throw new RuntimeException(e);
-                }
+                builder.PUT(BodyPublishers.ofFile(file.file()));
 
                 if (file.fileName() == null) {
                     builder.header("Filename", file.file().getFileName().toString());
@@ -213,13 +208,9 @@ class TopicImpl implements Topic {
             builder.header("Authorization", auth.header);
         }
 
-        try {
-            HttpResponse<String> response = CLIENT.send(builder.build(), BodyHandlers.ofString());
-            System.out.println(response.statusCode());
-            System.out.println(response.body());
-        } catch (IOException | InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+        HttpResponse<String> response = CLIENT.send(builder.build(), BodyHandlers.ofString());
+        System.out.println(response.statusCode());
+        System.out.println(response.body());
     }
 
     private String sanitiseAndWrap(String input) {
