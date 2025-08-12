@@ -3,7 +3,7 @@ package dev.siebrenvde.ntfy.message.action;
 import java.util.HashMap;
 import java.util.Map;
 
-import static dev.siebrenvde.ntfy.Util.checkArgument;
+import static dev.siebrenvde.ntfy.util.Util.checkArgument;
 
 class BroadcastActionImpl extends AbstractAction implements BroadcastAction {
 

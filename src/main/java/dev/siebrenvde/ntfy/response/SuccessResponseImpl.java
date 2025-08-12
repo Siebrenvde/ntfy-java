@@ -1,7 +1,7 @@
 package dev.siebrenvde.ntfy.response;
 
 import com.google.gson.JsonObject;
-import dev.siebrenvde.ntfy.Util;
+import dev.siebrenvde.ntfy.util.Util;
 import org.jspecify.annotations.Nullable;
 
 import java.time.Instant;

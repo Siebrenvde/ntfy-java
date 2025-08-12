@@ -1,6 +1,6 @@
 package dev.siebrenvde.ntfy.response;
 
-import dev.siebrenvde.ntfy.Util;
+import dev.siebrenvde.ntfy.util.Util;
 import org.jspecify.annotations.Nullable;
 
 record ErrorResponseImpl(

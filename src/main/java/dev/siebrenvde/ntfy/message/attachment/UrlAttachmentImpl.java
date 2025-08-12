@@ -2,7 +2,7 @@ package dev.siebrenvde.ntfy.message.attachment;
 
 import org.jspecify.annotations.Nullable;
 
-import static dev.siebrenvde.ntfy.Util.checkArgument;
+import static dev.siebrenvde.ntfy.util.Util.checkArgument;
 
 record UrlAttachmentImpl(
     String url,

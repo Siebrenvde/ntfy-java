@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static dev.siebrenvde.ntfy.Util.checkArgument;
+import static dev.siebrenvde.ntfy.util.Util.checkArgument;
 
 record MessageImpl(
     @Nullable String body,
