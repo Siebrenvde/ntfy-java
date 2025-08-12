@@ -118,13 +118,13 @@ class TopicImpl implements Topic {
                 }
 
                 else if (action instanceof BroadcastAction broadcast) {
-                  if (!broadcast.intent().equals(BroadcastAction.DEFAULT_INTENT)) {
-                      parts.put("intent", broadcast.intent());
-                  }
+                    if (!broadcast.intent().equals(BroadcastAction.DEFAULT_INTENT)) {
+                        parts.put("intent", broadcast.intent());
+                    }
 
-                  if (!broadcast.extras().isEmpty()) {
-                      broadcast.extras().forEach((key, value) -> parts.put("extras." + key, value));
-                  }
+                    if (!broadcast.extras().isEmpty()) {
+                        broadcast.extras().forEach((key, value) -> parts.put("extras." + key, value));
+                    }
                 }
 
                 else if (action instanceof HttpAction http) {
