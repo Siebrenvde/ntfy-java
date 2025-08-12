@@ -1,6 +1,7 @@
 package dev.siebrenvde.ntfy.topic;
 
 import dev.siebrenvde.ntfy.message.Message;
+import dev.siebrenvde.ntfy.response.Response;
 import org.jetbrains.annotations.Contract;
 
 import java.io.IOException;
@@ -79,22 +80,22 @@ public interface Topic {
      * Publishes a message to the topic
      * @param message the message
      */
-    void publish(Message message) throws IOException, InterruptedException;
+    Response publish(Message message) throws IOException, InterruptedException;
 
     /**
      * Publishes a message to the topic
      * @param builder the message builder
      */
-    default void publish(Message.Builder builder) throws IOException, InterruptedException {
-        publish(builder.build());
+    default Response publish(Message.Builder builder) throws IOException, InterruptedException {
+        return publish(builder.build());
     }
 
     /**
      * Publishes a message to the topic
      * @param message the message
      */
-    default void publish(String message) throws IOException, InterruptedException {
-        publish(Message.message(message));
+    default Response publish(String message) throws IOException, InterruptedException {
+        return publish(Message.message(message));
     }
 
     /**
@@ -103,7 +104,7 @@ public interface Topic {
      * @param time the time
      * @see <a href="https://docs.ntfy.sh/publish/#scheduled-delivery">Scheduled delivery</a>
      */
-    void scheduleAt(Message message, Instant time) throws IOException, InterruptedException;
+    Response scheduleAt(Message message, Instant time) throws IOException, InterruptedException;
 
     /**
      * Schedules a message to be published to the topic at a specified time
@@ -111,8 +112,8 @@ public interface Topic {
      * @param time the time
      * @see <a href="https://docs.ntfy.sh/publish/#scheduled-delivery">Scheduled delivery</a>
      */
-    default void scheduleAt(Message.Builder builder, Instant time) throws IOException, InterruptedException {
-        scheduleAt(builder.build(), time);
+    default Response scheduleAt(Message.Builder builder, Instant time) throws IOException, InterruptedException {
+        return scheduleAt(builder.build(), time);
     }
 
     /**
@@ -121,8 +122,8 @@ public interface Topic {
      * @param time the time
      * @see <a href="https://docs.ntfy.sh/publish/#scheduled-delivery">Scheduled delivery</a>
      */
-    default void scheduleAt(String message, Instant time) throws IOException, InterruptedException {
-        scheduleAt(Message.message(message), time);
+    default Response scheduleAt(String message, Instant time) throws IOException, InterruptedException {
+        return scheduleAt(Message.message(message), time);
     }
 
     /**
@@ -132,7 +133,7 @@ public interface Topic {
      * @param unit the temporal unit the delay is in
      * @see <a href="https://docs.ntfy.sh/publish/#scheduled-delivery">Scheduled delivery</a>
      */
-    void scheduleIn(Message message, long delay, TemporalUnit unit) throws IOException, InterruptedException;
+    Response scheduleIn(Message message, long delay, TemporalUnit unit) throws IOException, InterruptedException;
 
     /**
      * Schedules a message to be published to the topic after a specified delay
@@ -141,8 +142,8 @@ public interface Topic {
      * @param unit the temporal unit the delay is in
      * @see <a href="https://docs.ntfy.sh/publish/#scheduled-delivery">Scheduled delivery</a>
      */
-    default void scheduleIn(Message.Builder builder, long delay, TemporalUnit unit) throws IOException, InterruptedException {
-        scheduleIn(builder.build(), delay, unit);
+    default Response scheduleIn(Message.Builder builder, long delay, TemporalUnit unit) throws IOException, InterruptedException {
+        return scheduleIn(builder.build(), delay, unit);
     }
 
     /**
@@ -152,8 +153,8 @@ public interface Topic {
      * @param unit the temporal unit the delay is in
      * @see <a href="https://docs.ntfy.sh/publish/#scheduled-delivery">Scheduled delivery</a>
      */
-    default void scheduleIn(String message, long delay, TemporalUnit unit) throws IOException, InterruptedException {
-        scheduleIn(Message.message(message), delay, unit);
+    default Response scheduleIn(String message, long delay, TemporalUnit unit) throws IOException, InterruptedException {
+        return scheduleIn(Message.message(message), delay, unit);
     }
 
 }

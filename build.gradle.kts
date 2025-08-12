@@ -11,6 +11,7 @@ repositories {
 dependencies {
     compileOnlyApi(libs.jspecify)
     compileOnlyApi(libs.jetbrains.annotations)
+    implementation(libs.gson)
 }
 
 indra {

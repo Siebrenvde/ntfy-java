@@ -9,6 +9,9 @@ import dev.siebrenvde.ntfy.message.action.ViewAction;
 import dev.siebrenvde.ntfy.message.attachment.Attachment;
 import dev.siebrenvde.ntfy.message.attachment.FileAttachment;
 import dev.siebrenvde.ntfy.message.attachment.UrlAttachment;
+import dev.siebrenvde.ntfy.response.ErrorResponse;
+import dev.siebrenvde.ntfy.response.Response;
+import dev.siebrenvde.ntfy.response.SuccessResponse;
 import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
@@ -64,22 +67,22 @@ class TopicImpl implements Topic {
     }
 
     @Override
-    public void publish(Message message) throws IOException, InterruptedException {
-        sendRequest(message, null);
+    public Response publish(Message message) throws IOException, InterruptedException {
+        return sendRequest(message, null);
     }
 
     @Override
-    public void scheduleAt(Message message, Instant time) throws IOException, InterruptedException {
-        sendRequest(message, time);
+    public Response scheduleAt(Message message, Instant time) throws IOException, InterruptedException {
+        return sendRequest(message, time);
     }
 
     @Override
-    public void scheduleIn(Message message, long delay, TemporalUnit unit) throws IOException, InterruptedException {
-        sendRequest(message, Instant.now().plus(delay, unit));
+    public Response scheduleIn(Message message, long delay, TemporalUnit unit) throws IOException, InterruptedException {
+        return sendRequest(message, Instant.now().plus(delay, unit));
     }
 
     @SuppressWarnings("UastIncorrectHttpHeaderInspection")
-    private void sendRequest(Message message, @Nullable Instant time) throws IOException, InterruptedException {
+    private Response sendRequest(Message message, @Nullable Instant time) throws IOException, InterruptedException {
         HttpRequest.Builder builder = HttpRequest.newBuilder(uri);
 
         if (message.body() != null) {
@@ -209,8 +212,11 @@ class TopicImpl implements Topic {
         }
 
         HttpResponse<String> response = CLIENT.send(builder.build(), BodyHandlers.ofString());
-        System.out.println(response.statusCode());
-        System.out.println(response.body());
+        if (response.statusCode() == 200) {
+            return SuccessResponse.fromJson(response.body());
+        } else {
+            return ErrorResponse.fromJson(response.body());
+        }
     }
 
     private String sanitiseAndWrap(String input) {
