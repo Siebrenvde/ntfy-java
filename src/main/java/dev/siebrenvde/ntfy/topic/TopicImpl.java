@@ -6,8 +6,12 @@ import dev.siebrenvde.ntfy.message.action.Action;
 import dev.siebrenvde.ntfy.message.action.BroadcastAction;
 import dev.siebrenvde.ntfy.message.action.HttpAction;
 import dev.siebrenvde.ntfy.message.action.ViewAction;
+import dev.siebrenvde.ntfy.message.attachment.Attachment;
+import dev.siebrenvde.ntfy.message.attachment.FileAttachment;
+import dev.siebrenvde.ntfy.message.attachment.UrlAttachment;
 import org.jspecify.annotations.Nullable;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URI;
@@ -80,9 +84,7 @@ class TopicImpl implements Topic {
         HttpRequest.Builder builder = HttpRequest.newBuilder(uri);
 
         if (message.body() != null) {
-            builder.POST(BodyPublishers.ofString(message.body()));
-        } else {
-            builder.POST(BodyPublishers.noBody());
+            builder.header("Message", sanitiseAndWrap(message.body()));
         }
 
         if (message.title() != null) {
@@ -155,6 +157,32 @@ class TopicImpl implements Topic {
 
         if (message.clickAction() != null) {
             builder.header("Click", message.clickAction());
+        }
+
+        Attachment attachment = message.attachment();
+        if (attachment != null) {
+            if (attachment.fileName() != null) {
+                builder.header("Filename", attachment.fileName());
+            }
+
+            if (attachment instanceof UrlAttachment url) {
+                builder.header("Attach", url.url());
+                builder.POST(BodyPublishers.noBody());
+            }
+
+            else if (attachment instanceof FileAttachment file) {
+                try {
+                    builder.PUT(BodyPublishers.ofFile(file.file()));
+                } catch (FileNotFoundException e) {
+                    throw new RuntimeException(e);
+                }
+
+                if (file.fileName() == null) {
+                    builder.header("Filename", file.file().getFileName().toString());
+                }
+            }
+        } else {
+            builder.POST(BodyPublishers.noBody());
         }
 
         if (message.icon() != null) {

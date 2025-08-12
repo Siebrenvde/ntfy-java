@@ -1,6 +1,7 @@
 package dev.siebrenvde.ntfy.message;
 
 import dev.siebrenvde.ntfy.message.action.Action;
+import dev.siebrenvde.ntfy.message.attachment.Attachment;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Unmodifiable;
 import org.jspecify.annotations.Nullable;
@@ -88,6 +89,13 @@ public interface Message {
      */
     @Contract(pure = true)
     @Nullable String clickAction();
+
+    /**
+     * {@return the attachment}
+     * @see <a href="https://docs.ntfy.sh/publish/#attachments">Attachments</a>
+     */
+    @Contract(pure = true)
+    @Nullable Attachment attachment();
 
     /**
      * {@return the icon}
@@ -226,6 +234,15 @@ public interface Message {
          */
         @Contract(value = "_ -> this", mutates = "this")
         Builder clickAction(@Nullable String url);
+
+        /**
+         * Sets the attachment
+         * @param attachment the attachment
+         * @return the builder
+         * @see <a href="https://docs.ntfy.sh/publish/#attachments">Attachments</a>
+         */
+        @Contract(value = "_ -> this", mutates = "this")
+        Builder attachment(@Nullable Attachment attachment);
 
         /**
          * Sets the icon

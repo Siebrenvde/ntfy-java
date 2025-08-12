@@ -1,6 +1,7 @@
 package dev.siebrenvde.ntfy.message;
 
 import dev.siebrenvde.ntfy.message.action.Action;
+import dev.siebrenvde.ntfy.message.attachment.Attachment;
 import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -17,6 +18,7 @@ record MessageImpl(
     boolean markdown,
     List<Action> actions,
     @Nullable String clickAction,
+    @Nullable Attachment attachment,
     @Nullable String icon,
     @Nullable String email,
     @Nullable String phone,
@@ -34,6 +36,7 @@ record MessageImpl(
         private boolean markdown = false;
         private List<Action> actions = new ArrayList<>();
         private @Nullable String clickAction;
+        private @Nullable Attachment attachment;
         private @Nullable String icon;
         private @Nullable String email;
         private @Nullable String phone;
@@ -114,6 +117,12 @@ record MessageImpl(
         }
 
         @Override
+        public Builder attachment(@Nullable Attachment attachment) {
+            this.attachment = attachment;
+            return this;
+        }
+
+        @Override
         public Builder icon(@Nullable String url) {
             this.icon = url;
             return this;
@@ -153,6 +162,7 @@ record MessageImpl(
                 markdown,
                 Collections.unmodifiableList(actions),
                 clickAction,
+                attachment,
                 icon,
                 email,
                 phone,
