@@ -85,11 +85,11 @@ class TopicImpl implements Topic {
         HttpRequest.Builder builder = HttpRequest.newBuilder(uri);
 
         if (message.body() != null) {
-            builder.header("Message", sanitiseAndWrap(message.body()));
+            builder.header("Message", encodeBase64(message.body()));
         }
 
         if (message.title() != null) {
-            builder.header("Title", message.title());
+            builder.header("Title", encodeBase64(message.title()));
         }
 
         if (message.priority() != Priority.DEFAULT) {
@@ -97,7 +97,7 @@ class TopicImpl implements Topic {
         }
 
         if (!message.tags().isEmpty()) {
-            builder.header("Tags", String.join(",", message.tags()));
+            builder.header("Tags", encodeBase64(String.join(",", message.tags())));
         }
 
         if (message.markdown()) {
@@ -147,27 +147,31 @@ class TopicImpl implements Topic {
                 actions.add(String.join(
                     ",",
                     parts.entrySet().stream().map(entry -> {
-                        //noinspection CodeBlock2Expr
-                        return entry.getKey() + "=" + sanitiseAndWrap(entry.getValue());
+                        String value = entry.getValue();
+                        if (value.contains(",") || value.contains(";") || value.contains("\"")) {
+                            value = value.replace("\"", "\\\"");
+                            value = "\"" + value + "\"";
+                        }
+                        return entry.getKey() + "=" + value;
                     }).toList()
                 ));
             }
 
-            builder.header("Actions", String.join(";", actions));
+            builder.header("Actions", encodeBase64(String.join(";", actions)));
         }
 
         if (message.clickAction() != null) {
-            builder.header("Click", message.clickAction());
+            builder.header("Click", encodeBase64(message.clickAction()));
         }
 
         Attachment attachment = message.attachment();
         if (attachment != null) {
             if (attachment.fileName() != null) {
-                builder.header("Filename", attachment.fileName());
+                builder.header("Filename", encodeBase64(attachment.fileName()));
             }
 
             if (attachment instanceof UrlAttachment url) {
-                builder.header("Attach", url.url());
+                builder.header("Attach", encodeBase64(url.url()));
                 builder.POST(BodyPublishers.noBody());
             }
 
@@ -175,7 +179,7 @@ class TopicImpl implements Topic {
                 builder.PUT(BodyPublishers.ofFile(file.file()));
 
                 if (file.fileName() == null) {
-                    builder.header("Filename", file.file().getFileName().toString());
+                    builder.header("Filename", encodeBase64(file.file().getFileName().toString()));
                 }
             }
         } else {
@@ -183,15 +187,15 @@ class TopicImpl implements Topic {
         }
 
         if (message.icon() != null) {
-            builder.header("Icon", message.icon());
+            builder.header("Icon", encodeBase64(message.icon()));
         }
 
         if (message.email() != null) {
-            builder.header("Email", message.email());
+            builder.header("Email", encodeBase64(message.email()));
         }
 
         if (message.phone() != null) {
-            builder.header("Call", message.phone());
+            builder.header("Call", encodeBase64(message.phone()));
         }
 
         if (!message.cache()) {
@@ -218,13 +222,12 @@ class TopicImpl implements Topic {
         }
     }
 
-    private String sanitiseAndWrap(String input) {
-        if (input.contains(",") || input.contains(";") || input.contains("\"")) {
-            input = input.replace("\"", "\\\"");
-            input = "\"" + input + "\"";
-        }
-        if (input.contains("\n")) {
-            input = input.replace("\n", "\\n");
+    private String encodeBase64(String input) {
+        for (int i = 0; i < input.length(); i++) {
+            int c = input.codePointAt(i);
+            if (c < 32 || c > 126) {
+                return "=?UTF-8?B?" + Base64.getEncoder().encodeToString(input.getBytes()) + "?=";
+            }
         }
         return input;
     }
