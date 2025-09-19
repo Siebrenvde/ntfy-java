@@ -4,16 +4,15 @@ import org.jspecify.annotations.Nullable;
 
 import java.nio.file.Path;
 
-import static dev.siebrenvde.ntfy.util.Util.checkArgument;
+import static dev.siebrenvde.ntfy.util.Util.checkNotNull;
 
 record FileAttachmentImpl(
     Path file,
     @Nullable String fileName
 ) implements FileAttachment {
 
-    @SuppressWarnings("ConstantValue")
     FileAttachmentImpl {
-        checkArgument(file != null, "file cannot be null");
+        checkNotNull(file, "file");
     }
 
 }

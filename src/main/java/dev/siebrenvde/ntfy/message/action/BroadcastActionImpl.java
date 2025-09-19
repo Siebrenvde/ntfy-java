@@ -3,7 +3,7 @@ package dev.siebrenvde.ntfy.message.action;
 import java.util.HashMap;
 import java.util.Map;
 
-import static dev.siebrenvde.ntfy.util.Util.checkArgument;
+import static dev.siebrenvde.ntfy.util.Util.checkNotNull;
 
 class BroadcastActionImpl extends AbstractAction implements BroadcastAction {
 
@@ -31,7 +31,6 @@ class BroadcastActionImpl extends AbstractAction implements BroadcastAction {
         return extras;
     }
 
-    @SuppressWarnings("ConstantValue")
     static class BuilderImpl implements BroadcastAction.Builder {
 
         private final String label;
@@ -45,22 +44,22 @@ class BroadcastActionImpl extends AbstractAction implements BroadcastAction {
 
         @Override
         public Builder intent(String intent) {
-            checkArgument(intent != null, "intent cannot be null");
+            checkNotNull(intent, "intent");
             this.intent = intent;
             return this;
         }
 
         @Override
         public Builder extras(Map<String, String> extras) {
-            checkArgument(extras != null, "extras cannot be null");
+            checkNotNull(extras, "extras");
             this.extras = new HashMap<>(extras);
             return this;
         }
 
         @Override
         public Builder setExtra(String key, String value) {
-            checkArgument(key != null, "key cannot be null");
-            checkArgument(value != null, "value cannot be null");
+            checkNotNull(key, "key");
+            checkNotNull(value, "value");
             this.extras.put(key, value);
             return this;
         }

@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static dev.siebrenvde.ntfy.util.Util.checkArgument;
+import static dev.siebrenvde.ntfy.util.Util.checkNotNull;
 
 record MessageImpl(
     @Nullable String body,
@@ -26,7 +26,6 @@ record MessageImpl(
     boolean firebase
 ) implements Message {
 
-    @SuppressWarnings("ConstantValue")
     static class BuilderImpl implements Message.Builder {
 
         private @Nullable String body;
@@ -57,28 +56,28 @@ record MessageImpl(
 
         @Override
         public Builder priority(Priority priority) {
-            checkArgument(priority != null, "priority cannot be null");
+            checkNotNull(priority, "priority");
             this.priority = priority;
             return this;
         }
 
         @Override
         public Builder tags(String... tags) {
-            checkArgument(tags != null, "tags cannot be null");
+            checkNotNull(tags, "tags");
             this.tags = new ArrayList<>(List.of(tags));
             return this;
         }
 
         @Override
         public Builder tags(List<String> tags) {
-            checkArgument(tags != null, "tags cannot be null");
+            checkNotNull(tags, "tags");
             this.tags = new ArrayList<>(tags);
             return this;
         }
 
         @Override
         public Builder addTag(String tag) {
-            checkArgument(tag != null, "tag cannot be null");
+            checkNotNull(tag, "tag");
             this.tags.add(tag);
             return this;
         }
@@ -91,21 +90,21 @@ record MessageImpl(
 
         @Override
         public Builder actions(Action... actions) {
-            checkArgument(actions != null, "actions cannot be null");
+            checkNotNull(actions, "actions");
             this.actions = new ArrayList<>(List.of(actions));
             return this;
         }
 
         @Override
         public Builder actions(List<Action> actions) {
-            checkArgument(actions != null, "actions cannot be null");
+            checkNotNull(actions, "actions");
             this.actions = new ArrayList<>(actions);
             return this;
         }
 
         @Override
         public Builder addAction(Action action) {
-            checkArgument(action != null, "action cannot be null");
+            checkNotNull(action, "action");
             this.actions.add(action);
             return this;
         }

@@ -1,15 +1,14 @@
 package dev.siebrenvde.ntfy.message.action;
 
-import static dev.siebrenvde.ntfy.util.Util.checkArgument;
+import static dev.siebrenvde.ntfy.util.Util.checkNotNull;
 
 class ViewActionImpl extends AbstractAction implements ViewAction {
 
     private final String url;
 
-    @SuppressWarnings("ConstantValue")
     ViewActionImpl(String label, String url, boolean clear) {
         super(label, clear);
-        checkArgument(url != null, "url cannot be null");
+        checkNotNull(url, "url");
         this.url = url;
     }
 

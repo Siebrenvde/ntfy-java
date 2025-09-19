@@ -5,7 +5,7 @@ import org.jspecify.annotations.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 
-import static dev.siebrenvde.ntfy.util.Util.checkArgument;
+import static dev.siebrenvde.ntfy.util.Util.checkNotNull;
 
 class HttpActionImpl extends AbstractAction implements HttpAction {
 
@@ -47,7 +47,6 @@ class HttpActionImpl extends AbstractAction implements HttpAction {
         return body;
     }
 
-    @SuppressWarnings("ConstantValue")
     static class BuilderImpl implements HttpAction.Builder {
 
         private final String label;
@@ -58,29 +57,29 @@ class HttpActionImpl extends AbstractAction implements HttpAction {
         private boolean clear = false;
 
         BuilderImpl(String label, String url) {
-            checkArgument(url != null, "url cannot be null");
+            checkNotNull(url, "url");
             this.label = label;
             this.url = url;
         }
 
         @Override
         public Builder method(Method method) {
-            checkArgument(method != null, "method cannot be null");
+            checkNotNull(method, "method");
             this.method = method;
             return this;
         }
 
         @Override
         public Builder headers(Map<String, String> headers) {
-            checkArgument(headers != null, "headers cannot be null");
+            checkNotNull(headers, "headers");
             this.headers = headers;
             return this;
         }
 
         @Override
         public Builder setHeader(String header, String value) {
-            checkArgument(header != null, "header cannot be null");
-            checkArgument(value != null, "value cannot be null");
+            checkNotNull(header, "header");
+            checkNotNull(value, "value");
             this.headers.put(header, value);
             return this;
         }

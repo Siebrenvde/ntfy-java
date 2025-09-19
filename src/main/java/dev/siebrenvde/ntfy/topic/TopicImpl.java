@@ -31,7 +31,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static dev.siebrenvde.ntfy.util.Util.checkArgument;
+import static dev.siebrenvde.ntfy.util.Util.checkNotNull;
 
 class TopicImpl implements Topic {
 
@@ -41,10 +41,9 @@ class TopicImpl implements Topic {
     private final String name;
     private final URI uri;
 
-    @SuppressWarnings("ConstantValue")
     TopicImpl(String host, String name) {
-        checkArgument(host != null, "host cannot be null");
-        checkArgument(name != null, "name cannot be null");
+        checkNotNull(host, "host");
+        checkNotNull(name, "name");
         this.host = host;
         this.name = name;
         try {

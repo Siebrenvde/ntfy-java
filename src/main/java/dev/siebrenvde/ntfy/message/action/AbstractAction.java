@@ -1,15 +1,14 @@
 package dev.siebrenvde.ntfy.message.action;
 
-import static dev.siebrenvde.ntfy.util.Util.checkArgument;
+import static dev.siebrenvde.ntfy.util.Util.checkNotNull;
 
 abstract class AbstractAction implements Action {
 
     private final String label;
     private final boolean clear;
 
-    @SuppressWarnings("ConstantValue")
     AbstractAction(String label, boolean clear) {
-        checkArgument(label != null, "label cannot be null");
+        checkNotNull(label, "label");
         this.label = label;
         this.clear = clear;
     }
