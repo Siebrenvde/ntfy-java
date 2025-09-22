@@ -24,6 +24,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpRequest.BodyPublishers;
 import java.net.http.HttpResponse;
 import java.net.http.HttpResponse.BodyHandlers;
+import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.time.temporal.TemporalUnit;
 import java.util.ArrayList;
@@ -258,7 +259,7 @@ class TopicImpl implements Topic {
         for (int i = 0; i < input.length(); i++) {
             int c = input.codePointAt(i);
             if (c < 32 || c > 126) {
-                return "=?UTF-8?B?" + Base64.getEncoder().encodeToString(input.getBytes()) + "?=";
+                return "=?UTF-8?B?" + Base64.getEncoder().encodeToString(input.getBytes(StandardCharsets.UTF_8)) + "?=";
             }
         }
         return input;
