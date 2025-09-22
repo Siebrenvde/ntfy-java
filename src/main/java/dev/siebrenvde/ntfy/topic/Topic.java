@@ -83,12 +83,16 @@ public interface Topic {
     /**
      * Publishes a message to the topic
      * @param message the message
+     * @return a {@link Result} with either a {@link PublishResponse} or an {@link ErrorResponse}
+     * @throws FileNotFoundException if the file for a file attachment was not found
      */
     Result<PublishResponse, ErrorResponse> publish(Message message) throws IOException, InterruptedException;
 
     /**
      * Publishes a message to the topic
      * @param builder the message builder
+     * @return a {@link Result} with either a {@link PublishResponse} or an {@link ErrorResponse}
+     * @throws FileNotFoundException if the file for a file attachment was not found
      */
     default Result<PublishResponse, ErrorResponse> publish(Message.Builder builder) throws IOException, InterruptedException {
         return publish(builder.build());
@@ -97,6 +101,8 @@ public interface Topic {
     /**
      * Publishes a message to the topic
      * @param message the message
+     * @return a {@link Result} with either a {@link PublishResponse} or an {@link ErrorResponse}
+     * @throws FileNotFoundException if the file for a file attachment was not found
      */
     default Result<PublishResponse, ErrorResponse> publish(String message) throws IOException, InterruptedException {
         return publish(Message.message(message));
@@ -106,6 +112,8 @@ public interface Topic {
      * Schedules a message to be published to the topic at a specified time
      * @param message the message
      * @param time the time
+     * @return a {@link Result} with either a {@link PublishResponse} or an {@link ErrorResponse}
+     * @throws FileNotFoundException if the file for a file attachment was not found
      * @see <a href="https://docs.ntfy.sh/publish/#scheduled-delivery">Scheduled delivery</a>
      */
     Result<PublishResponse, ErrorResponse> scheduleAt(Message message, Instant time) throws IOException, InterruptedException;
@@ -114,6 +122,8 @@ public interface Topic {
      * Schedules a message to be published to the topic at a specified time
      * @param builder the message builder
      * @param time the time
+     * @return a {@link Result} with either a {@link PublishResponse} or an {@link ErrorResponse}
+     * @throws FileNotFoundException if the file for a file attachment was not found
      * @see <a href="https://docs.ntfy.sh/publish/#scheduled-delivery">Scheduled delivery</a>
      */
     default Result<PublishResponse, ErrorResponse> scheduleAt(Message.Builder builder, Instant time) throws IOException, InterruptedException {
@@ -124,6 +134,8 @@ public interface Topic {
      * Schedules a message to be published to the topic at a specified time
      * @param message the message
      * @param time the time
+     * @return a {@link Result} with either a {@link PublishResponse} or an {@link ErrorResponse}
+     * @throws FileNotFoundException if the file for a file attachment was not found
      * @see <a href="https://docs.ntfy.sh/publish/#scheduled-delivery">Scheduled delivery</a>
      */
     default Result<PublishResponse, ErrorResponse> scheduleAt(String message, Instant time) throws IOException, InterruptedException {
@@ -135,6 +147,8 @@ public interface Topic {
      * @param message the message
      * @param delay the delay
      * @param unit the temporal unit the delay is in
+     * @return a {@link Result} with either a {@link PublishResponse} or an {@link ErrorResponse}
+     * @throws FileNotFoundException if the file for a file attachment was not found
      * @see <a href="https://docs.ntfy.sh/publish/#scheduled-delivery">Scheduled delivery</a>
      */
     Result<PublishResponse, ErrorResponse> scheduleIn(Message message, long delay, TemporalUnit unit) throws IOException, InterruptedException;
@@ -144,6 +158,8 @@ public interface Topic {
      * @param builder the message builder
      * @param delay the delay
      * @param unit the temporal unit the delay is in
+     * @return a {@link Result} with either a {@link PublishResponse} or an {@link ErrorResponse}
+     * @throws FileNotFoundException if the file for a file attachment was not found
      * @see <a href="https://docs.ntfy.sh/publish/#scheduled-delivery">Scheduled delivery</a>
      */
     default Result<PublishResponse, ErrorResponse> scheduleIn(Message.Builder builder, long delay, TemporalUnit unit) throws IOException, InterruptedException {
@@ -155,6 +171,8 @@ public interface Topic {
      * @param message the message
      * @param delay the delay
      * @param unit the temporal unit the delay is in
+     * @return a {@link Result} with either a {@link PublishResponse} or an {@link ErrorResponse}
+     * @throws FileNotFoundException if the file for a file attachment was not found
      * @see <a href="https://docs.ntfy.sh/publish/#scheduled-delivery">Scheduled delivery</a>
      */
     default Result<PublishResponse, ErrorResponse> scheduleIn(String message, long delay, TemporalUnit unit) throws IOException, InterruptedException {
@@ -194,6 +212,7 @@ public interface Topic {
      * @param message the message
      * @return a {@link Result} with either a {@link PublishResponse} or an {@link ErrorResponse}
      * @throws FileNotFoundException if the file for a file attachment was not found
+     * @see <a href="https://docs.ntfy.sh/publish/#scheduled-delivery">Scheduled delivery</a>
      */
     CompletableFuture<Result<PublishResponse, ErrorResponse>> scheduleAtAsync(Message message, Instant time) throws FileNotFoundException;
 
@@ -202,6 +221,7 @@ public interface Topic {
      * @param builder the message builder
      * @return a {@link Result} with either a {@link PublishResponse} or an {@link ErrorResponse}
      * @throws FileNotFoundException if the file for a file attachment was not found
+     * @see <a href="https://docs.ntfy.sh/publish/#scheduled-delivery">Scheduled delivery</a>
      */
     default CompletableFuture<Result<PublishResponse, ErrorResponse>> scheduleAtAsync(Message.Builder builder, Instant time) throws FileNotFoundException {
         return scheduleAtAsync(builder.build(), time);
@@ -212,6 +232,7 @@ public interface Topic {
      * @param message the message
      * @return a {@link Result} with either a {@link PublishResponse} or an {@link ErrorResponse}
      * @throws FileNotFoundException if the file for a file attachment was not found
+     * @see <a href="https://docs.ntfy.sh/publish/#scheduled-delivery">Scheduled delivery</a>
      */
     default CompletableFuture<Result<PublishResponse, ErrorResponse>> scheduleAtAsync(String message, Instant time) throws FileNotFoundException {
         return scheduleAtAsync(Message.message(message), time);
@@ -222,6 +243,7 @@ public interface Topic {
      * @param message the message
      * @return a {@link Result} with either a {@link PublishResponse} or an {@link ErrorResponse}
      * @throws FileNotFoundException if the file for a file attachment was not found
+     * @see <a href="https://docs.ntfy.sh/publish/#scheduled-delivery">Scheduled delivery</a>
      */
     CompletableFuture<Result<PublishResponse, ErrorResponse>> scheduleInAsync(Message message, long delay, TemporalUnit unit) throws FileNotFoundException;
 
@@ -230,6 +252,7 @@ public interface Topic {
      * @param builder the message builder
      * @return a {@link Result} with either a {@link PublishResponse} or an {@link ErrorResponse}
      * @throws FileNotFoundException if the file for a file attachment was not found
+     * @see <a href="https://docs.ntfy.sh/publish/#scheduled-delivery">Scheduled delivery</a>
      */
     default CompletableFuture<Result<PublishResponse, ErrorResponse>> scheduleInAsync(Message.Builder builder, long delay, TemporalUnit unit) throws FileNotFoundException {
         return scheduleInAsync(builder.build(), delay, unit);
@@ -240,6 +263,7 @@ public interface Topic {
      * @param message the message
      * @return a {@link Result} with either a {@link PublishResponse} or an {@link ErrorResponse}
      * @throws FileNotFoundException if the file for a file attachment was not found
+     * @see <a href="https://docs.ntfy.sh/publish/#scheduled-delivery">Scheduled delivery</a>
      */
     default CompletableFuture<Result<PublishResponse, ErrorResponse>> scheduleInAsync(String message, long delay, TemporalUnit unit) throws FileNotFoundException {
         return scheduleInAsync(Message.message(message), delay, unit);
