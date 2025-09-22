@@ -271,7 +271,7 @@ class TopicImpl implements Topic {
 
         Secured(String host, String name, String username, String password) {
             super(host, name);
-            this.header = "Basic " + Base64.getEncoder().encodeToString((username + ":" + password).getBytes());
+            this.header = "Basic " + Base64.getEncoder().encodeToString((username + ":" + password).getBytes(StandardCharsets.UTF_8));
         }
 
         Secured(String host, String name, String token) {
