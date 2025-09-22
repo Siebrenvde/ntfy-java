@@ -5,7 +5,7 @@ import org.jspecify.annotations.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 
-import static dev.siebrenvde.ntfy.util.Util.checkNotNull;
+import static dev.siebrenvde.ntfy.internal.Util.checkNotNull;
 
 class HttpActionImpl extends AbstractAction implements HttpAction {
 

@@ -1,7 +1,9 @@
 package dev.siebrenvde.ntfy.topic;
 
 import dev.siebrenvde.ntfy.message.Message;
-import dev.siebrenvde.ntfy.response.Response;
+import dev.siebrenvde.ntfy.response.ErrorResponse;
+import dev.siebrenvde.ntfy.response.PublishResponse;
+import dev.siebrenvde.ntfy.util.Result;
 import org.jetbrains.annotations.Contract;
 
 import java.io.IOException;
@@ -80,13 +82,13 @@ public interface Topic {
      * Publishes a message to the topic
      * @param message the message
      */
-    Response publish(Message message) throws IOException, InterruptedException;
+    Result<PublishResponse, ErrorResponse> publish(Message message) throws IOException, InterruptedException;
 
     /**
      * Publishes a message to the topic
      * @param builder the message builder
      */
-    default Response publish(Message.Builder builder) throws IOException, InterruptedException {
+    default Result<PublishResponse, ErrorResponse> publish(Message.Builder builder) throws IOException, InterruptedException {
         return publish(builder.build());
     }
 
@@ -94,7 +96,7 @@ public interface Topic {
      * Publishes a message to the topic
      * @param message the message
      */
-    default Response publish(String message) throws IOException, InterruptedException {
+    default Result<PublishResponse, ErrorResponse> publish(String message) throws IOException, InterruptedException {
         return publish(Message.message(message));
     }
 
@@ -104,7 +106,7 @@ public interface Topic {
      * @param time the time
      * @see <a href="https://docs.ntfy.sh/publish/#scheduled-delivery">Scheduled delivery</a>
      */
-    Response scheduleAt(Message message, Instant time) throws IOException, InterruptedException;
+    Result<PublishResponse, ErrorResponse> scheduleAt(Message message, Instant time) throws IOException, InterruptedException;
 
     /**
      * Schedules a message to be published to the topic at a specified time
@@ -112,7 +114,7 @@ public interface Topic {
      * @param time the time
      * @see <a href="https://docs.ntfy.sh/publish/#scheduled-delivery">Scheduled delivery</a>
      */
-    default Response scheduleAt(Message.Builder builder, Instant time) throws IOException, InterruptedException {
+    default Result<PublishResponse, ErrorResponse> scheduleAt(Message.Builder builder, Instant time) throws IOException, InterruptedException {
         return scheduleAt(builder.build(), time);
     }
 
@@ -122,7 +124,7 @@ public interface Topic {
      * @param time the time
      * @see <a href="https://docs.ntfy.sh/publish/#scheduled-delivery">Scheduled delivery</a>
      */
-    default Response scheduleAt(String message, Instant time) throws IOException, InterruptedException {
+    default Result<PublishResponse, ErrorResponse> scheduleAt(String message, Instant time) throws IOException, InterruptedException {
         return scheduleAt(Message.message(message), time);
     }
 
@@ -133,7 +135,7 @@ public interface Topic {
      * @param unit the temporal unit the delay is in
      * @see <a href="https://docs.ntfy.sh/publish/#scheduled-delivery">Scheduled delivery</a>
      */
-    Response scheduleIn(Message message, long delay, TemporalUnit unit) throws IOException, InterruptedException;
+    Result<PublishResponse, ErrorResponse> scheduleIn(Message message, long delay, TemporalUnit unit) throws IOException, InterruptedException;
 
     /**
      * Schedules a message to be published to the topic after a specified delay
@@ -142,7 +144,7 @@ public interface Topic {
      * @param unit the temporal unit the delay is in
      * @see <a href="https://docs.ntfy.sh/publish/#scheduled-delivery">Scheduled delivery</a>
      */
-    default Response scheduleIn(Message.Builder builder, long delay, TemporalUnit unit) throws IOException, InterruptedException {
+    default Result<PublishResponse, ErrorResponse> scheduleIn(Message.Builder builder, long delay, TemporalUnit unit) throws IOException, InterruptedException {
         return scheduleIn(builder.build(), delay, unit);
     }
 
@@ -153,7 +155,7 @@ public interface Topic {
      * @param unit the temporal unit the delay is in
      * @see <a href="https://docs.ntfy.sh/publish/#scheduled-delivery">Scheduled delivery</a>
      */
-    default Response scheduleIn(String message, long delay, TemporalUnit unit) throws IOException, InterruptedException {
+    default Result<PublishResponse, ErrorResponse> scheduleIn(String message, long delay, TemporalUnit unit) throws IOException, InterruptedException {
         return scheduleIn(Message.message(message), delay, unit);
     }
 

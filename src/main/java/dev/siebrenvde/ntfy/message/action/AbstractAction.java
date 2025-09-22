@@ -1,6 +1,6 @@
 package dev.siebrenvde.ntfy.message.action;
 
-import static dev.siebrenvde.ntfy.util.Util.checkNotNull;
+import static dev.siebrenvde.ntfy.internal.Util.checkNotNull;
 
 abstract class AbstractAction implements Action {
 

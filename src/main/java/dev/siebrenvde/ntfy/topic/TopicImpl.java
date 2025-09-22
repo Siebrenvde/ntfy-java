@@ -10,8 +10,8 @@ import dev.siebrenvde.ntfy.message.attachment.Attachment;
 import dev.siebrenvde.ntfy.message.attachment.FileAttachment;
 import dev.siebrenvde.ntfy.message.attachment.UrlAttachment;
 import dev.siebrenvde.ntfy.response.ErrorResponse;
-import dev.siebrenvde.ntfy.response.Response;
-import dev.siebrenvde.ntfy.response.SuccessResponse;
+import dev.siebrenvde.ntfy.response.PublishResponse;
+import dev.siebrenvde.ntfy.util.Result;
 import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
@@ -31,7 +31,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static dev.siebrenvde.ntfy.util.Util.checkNotNull;
+import static dev.siebrenvde.ntfy.internal.Util.checkNotNull;
 
 class TopicImpl implements Topic {
 
@@ -66,22 +66,22 @@ class TopicImpl implements Topic {
     }
 
     @Override
-    public Response publish(Message message) throws IOException, InterruptedException {
+    public Result<PublishResponse, ErrorResponse> publish(Message message) throws IOException, InterruptedException {
         return sendRequest(message, null);
     }
 
     @Override
-    public Response scheduleAt(Message message, Instant time) throws IOException, InterruptedException {
+    public Result<PublishResponse, ErrorResponse> scheduleAt(Message message, Instant time) throws IOException, InterruptedException {
         return sendRequest(message, time);
     }
 
     @Override
-    public Response scheduleIn(Message message, long delay, TemporalUnit unit) throws IOException, InterruptedException {
+    public Result<PublishResponse, ErrorResponse> scheduleIn(Message message, long delay, TemporalUnit unit) throws IOException, InterruptedException {
         return sendRequest(message, Instant.now().plus(delay, unit));
     }
 
     @SuppressWarnings("UastIncorrectHttpHeaderInspection")
-    private Response sendRequest(Message message, @Nullable Instant time) throws IOException, InterruptedException {
+    private Result<PublishResponse, ErrorResponse> sendRequest(Message message, @Nullable Instant time) throws IOException, InterruptedException {
         HttpRequest.Builder builder = HttpRequest.newBuilder(uri);
 
         if (message.body() != null) {
@@ -216,9 +216,9 @@ class TopicImpl implements Topic {
 
         HttpResponse<String> response = CLIENT.send(builder.build(), BodyHandlers.ofString());
         if (response.statusCode() == 200) {
-            return SuccessResponse.fromJson(response.body());
+            return Result.success(PublishResponse.fromJson(response.body()));
         } else {
-            return ErrorResponse.fromJson(response.body());
+            return Result.error(ErrorResponse.fromJson(response.body()));
         }
     }
 

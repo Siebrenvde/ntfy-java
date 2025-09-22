@@ -4,7 +4,7 @@ import org.jspecify.annotations.Nullable;
 
 import java.nio.file.Path;
 
-import static dev.siebrenvde.ntfy.util.Util.checkNotNull;
+import static dev.siebrenvde.ntfy.internal.Util.checkNotNull;
 
 record FileAttachmentImpl(
     Path file,

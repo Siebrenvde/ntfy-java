@@ -1,4 +1,4 @@
-package dev.siebrenvde.ntfy.util;
+package dev.siebrenvde.ntfy.internal;
 
 import com.google.gson.Gson;
 import org.jetbrains.annotations.ApiStatus;

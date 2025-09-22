@@ -9,8 +9,9 @@ module dev.siebrenvde.ntfy {
 
     exports dev.siebrenvde.ntfy;
     exports dev.siebrenvde.ntfy.message;
-    exports dev.siebrenvde.ntfy.topic;
     exports dev.siebrenvde.ntfy.message.action;
     exports dev.siebrenvde.ntfy.message.attachment;
     exports dev.siebrenvde.ntfy.response;
+    exports dev.siebrenvde.ntfy.topic;
+    exports dev.siebrenvde.ntfy.util;
 }

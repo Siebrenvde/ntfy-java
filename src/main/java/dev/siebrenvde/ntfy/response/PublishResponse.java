@@ -8,7 +8,7 @@ import java.time.Instant;
 /**
  * Represents a response from the server when a message was successfully published
  */
-public interface SuccessResponse extends Response {
+public interface PublishResponse {
 
     /**
      * {@return the message id}
@@ -26,8 +26,8 @@ public interface SuccessResponse extends Response {
     @Nullable Instant expires();
 
     @ApiStatus.Internal
-    static SuccessResponse fromJson(String json) {
-        return SuccessResponseImpl.fromJson(json);
+    static PublishResponse fromJson(String json) {
+        return PublishResponseImpl.fromJson(json);
     }
 
 }
