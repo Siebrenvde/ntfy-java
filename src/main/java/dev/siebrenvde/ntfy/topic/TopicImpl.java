@@ -14,6 +14,7 @@ import dev.siebrenvde.ntfy.response.PublishResponse;
 import dev.siebrenvde.ntfy.util.Result;
 import org.jspecify.annotations.Nullable;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URI;
@@ -30,6 +31,7 @@ import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 
 import static dev.siebrenvde.ntfy.internal.Util.checkNotNull;
 
@@ -80,8 +82,43 @@ class TopicImpl implements Topic {
         return sendRequest(message, Instant.now().plus(delay, unit));
     }
 
-    @SuppressWarnings("UastIncorrectHttpHeaderInspection")
+    @Override
+    public CompletableFuture<Result<PublishResponse, ErrorResponse>> publishAsync(Message message) throws FileNotFoundException {
+        return sendRequestAsync(message, null);
+    }
+
+    @Override
+    public CompletableFuture<Result<PublishResponse, ErrorResponse>> scheduleAtAsync(Message message, Instant time) throws FileNotFoundException {
+        return sendRequestAsync(message, time);
+    }
+
+    @Override
+    public CompletableFuture<Result<PublishResponse, ErrorResponse>> scheduleInAsync(Message message, long delay, TemporalUnit unit) throws FileNotFoundException {
+        return sendRequestAsync(message, Instant.now().plus(delay, unit));
+    }
+
     private Result<PublishResponse, ErrorResponse> sendRequest(Message message, @Nullable Instant time) throws IOException, InterruptedException {
+        HttpResponse<String> response = CLIENT.send(createRequest(message, time), BodyHandlers.ofString());
+        if (response.statusCode() == 200) {
+            return Result.success(PublishResponse.fromJson(response.body()));
+        } else {
+            return Result.error(ErrorResponse.fromJson(response.body()));
+        }
+    }
+
+    private CompletableFuture<Result<PublishResponse, ErrorResponse>> sendRequestAsync(Message message, @Nullable Instant time) throws FileNotFoundException {
+        return CLIENT.sendAsync(createRequest(message, time), BodyHandlers.ofString())
+            .thenApply(response -> {
+                if (response.statusCode() == 200) {
+                    return Result.success(PublishResponse.fromJson(response.body()));
+                } else {
+                    return Result.error(ErrorResponse.fromJson(response.body()));
+                }
+            });
+    }
+
+    @SuppressWarnings("UastIncorrectHttpHeaderInspection")
+    private HttpRequest createRequest(Message message, @Nullable Instant time) throws FileNotFoundException {
         HttpRequest.Builder builder = HttpRequest.newBuilder(uri);
 
         if (message.body() != null) {
@@ -214,12 +251,7 @@ class TopicImpl implements Topic {
             builder.header("Authorization", auth.header);
         }
 
-        HttpResponse<String> response = CLIENT.send(builder.build(), BodyHandlers.ofString());
-        if (response.statusCode() == 200) {
-            return Result.success(PublishResponse.fromJson(response.body()));
-        } else {
-            return Result.error(ErrorResponse.fromJson(response.body()));
-        }
+        return builder.build();
     }
 
     private String encodeBase64(String input) {

@@ -6,9 +6,11 @@ import dev.siebrenvde.ntfy.response.PublishResponse;
 import dev.siebrenvde.ntfy.util.Result;
 import org.jetbrains.annotations.Contract;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.time.Instant;
 import java.time.temporal.TemporalUnit;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * Represents a topic to publish messages to
@@ -157,6 +159,90 @@ public interface Topic {
      */
     default Result<PublishResponse, ErrorResponse> scheduleIn(String message, long delay, TemporalUnit unit) throws IOException, InterruptedException {
         return scheduleIn(Message.message(message), delay, unit);
+    }
+
+    /**
+     * Asynchronously publishes a message to the topic
+     * @param message the message
+     * @return a {@link Result} with either a {@link PublishResponse} or an {@link ErrorResponse}
+     * @throws FileNotFoundException if the file for a file attachment was not found
+     */
+    CompletableFuture<Result<PublishResponse, ErrorResponse>> publishAsync(Message message) throws FileNotFoundException;
+
+    /**
+     * Asynchronously publishes a message to the topic
+     * @param builder the message builder
+     * @return a {@link Result} with either a {@link PublishResponse} or an {@link ErrorResponse}
+     * @throws FileNotFoundException if the file for a file attachment was not found
+     */
+    default CompletableFuture<Result<PublishResponse, ErrorResponse>> publishAsync(Message.Builder builder) throws FileNotFoundException {
+        return publishAsync(builder.build());
+    }
+
+    /**
+     * Asynchronously publishes a message to the topic
+     * @param message the message
+     * @return a {@link Result} with either a {@link PublishResponse} or an {@link ErrorResponse}
+     * @throws FileNotFoundException if the file for a file attachment was not found
+     */
+    default CompletableFuture<Result<PublishResponse, ErrorResponse>> publishAsync(String message) throws FileNotFoundException {
+        return publishAsync(Message.message(message));
+    }
+
+    /**
+     * Asynchronously schedules a message to be published to the topic at a specified time
+     * @param message the message
+     * @return a {@link Result} with either a {@link PublishResponse} or an {@link ErrorResponse}
+     * @throws FileNotFoundException if the file for a file attachment was not found
+     */
+    CompletableFuture<Result<PublishResponse, ErrorResponse>> scheduleAtAsync(Message message, Instant time) throws FileNotFoundException;
+
+    /**
+     * Asynchronously schedules a message to be published to the topic at a specified time
+     * @param builder the message builder
+     * @return a {@link Result} with either a {@link PublishResponse} or an {@link ErrorResponse}
+     * @throws FileNotFoundException if the file for a file attachment was not found
+     */
+    default CompletableFuture<Result<PublishResponse, ErrorResponse>> scheduleAtAsync(Message.Builder builder, Instant time) throws FileNotFoundException {
+        return scheduleAtAsync(builder.build(), time);
+    }
+
+    /**
+     * Asynchronously schedules a message to be published to the topic at a specified time
+     * @param message the message
+     * @return a {@link Result} with either a {@link PublishResponse} or an {@link ErrorResponse}
+     * @throws FileNotFoundException if the file for a file attachment was not found
+     */
+    default CompletableFuture<Result<PublishResponse, ErrorResponse>> scheduleAtAsync(String message, Instant time) throws FileNotFoundException {
+        return scheduleAtAsync(Message.message(message), time);
+    }
+
+    /**
+     * Asynchronously schedules a message to be published to the topic after a specified delay
+     * @param message the message
+     * @return a {@link Result} with either a {@link PublishResponse} or an {@link ErrorResponse}
+     * @throws FileNotFoundException if the file for a file attachment was not found
+     */
+    CompletableFuture<Result<PublishResponse, ErrorResponse>> scheduleInAsync(Message message, long delay, TemporalUnit unit) throws FileNotFoundException;
+
+    /**
+     * Asynchronously schedules a message to be published to the topic after a specified delay
+     * @param builder the message builder
+     * @return a {@link Result} with either a {@link PublishResponse} or an {@link ErrorResponse}
+     * @throws FileNotFoundException if the file for a file attachment was not found
+     */
+    default CompletableFuture<Result<PublishResponse, ErrorResponse>> scheduleInAsync(Message.Builder builder, long delay, TemporalUnit unit) throws FileNotFoundException {
+        return scheduleInAsync(builder.build(), delay, unit);
+    }
+
+    /**
+     * Asynchronously schedules a message to be published to the topic after a specified delay
+     * @param message the message
+     * @return a {@link Result} with either a {@link PublishResponse} or an {@link ErrorResponse}
+     * @throws FileNotFoundException if the file for a file attachment was not found
+     */
+    default CompletableFuture<Result<PublishResponse, ErrorResponse>> scheduleInAsync(String message, long delay, TemporalUnit unit) throws FileNotFoundException {
+        return scheduleInAsync(Message.message(message), delay, unit);
     }
 
 }
