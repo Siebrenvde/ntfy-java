@@ -65,7 +65,7 @@ class ResultImpl {
 
         @Override
         public Optional<ERROR> error() {
-            return Optional.empty();
+            return Optional.of(_error);
         }
 
         @Override
