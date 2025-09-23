@@ -6,7 +6,7 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-public interface Result<VALUE, ERROR> {
+public sealed interface Result<VALUE, ERROR> permits ResultImpl.Success, ResultImpl.Error {
 
     /**
      * Creates a new success result

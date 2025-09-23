@@ -16,7 +16,7 @@ import java.util.concurrent.CompletableFuture;
  * Represents a topic to publish messages to
  */
 @SuppressWarnings("unused")
-public interface Topic {
+public sealed interface Topic permits TopicImpl {
 
     String DEFAULT_HOST = "https://ntfy.sh";
 

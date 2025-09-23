@@ -10,7 +10,7 @@ import java.util.Map;
  * Represents an HTTP request action
  * @see <a href="https://docs.ntfy.sh/publish/#send-http-request">Send HTTP request</a>
  */
-public interface HttpAction extends Action {
+public sealed interface HttpAction extends Action permits HttpActionImpl {
 
     Method DEFAULT_METHOD = Method.POST;
 

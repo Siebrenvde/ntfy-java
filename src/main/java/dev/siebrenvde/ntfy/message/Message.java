@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * Represents a message to be published
  */
-public interface Message {
+public sealed interface Message permits MessageImpl {
 
     /**
      * Creates a new message builder
@@ -136,7 +136,7 @@ public interface Message {
      * Builder for {@link Message}
      */
     @SuppressWarnings("unused")
-    interface Builder {
+    sealed interface Builder permits MessageImpl.BuilderImpl {
 
         /**
          * Sets the message body

@@ -9,7 +9,7 @@ import java.util.Map;
  * Represents an Android broadcast action
  * @see <a href="https://docs.ntfy.sh/publish/#send-android-broadcast">Send Android broadcast</a>
  */
-public interface BroadcastAction extends Action {
+public sealed interface BroadcastAction extends Action permits BroadcastActionImpl {
 
     String DEFAULT_INTENT = "io.heckel.ntfy.USER_ACTION";
 

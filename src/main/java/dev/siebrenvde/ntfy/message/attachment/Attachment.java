@@ -9,7 +9,7 @@ import java.nio.file.Path;
  * Represents an attachment
  * @see <a href="https://docs.ntfy.sh/publish/#attachments">Attachments</a>
  */
-public interface Attachment {
+public sealed interface Attachment permits FileAttachment, UrlAttachment {
 
     /**
      * Creates a new attachment from a URL and file name

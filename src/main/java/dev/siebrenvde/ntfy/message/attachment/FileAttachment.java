@@ -8,7 +8,7 @@ import java.nio.file.Path;
  * Represents a file attachment
  * @see <a href="https://docs.ntfy.sh/publish/#attach-local-file">Attach local file</a>
  */
-public interface FileAttachment extends Attachment {
+public sealed interface FileAttachment extends Attachment permits FileAttachmentImpl {
 
     /**
      * {@return the file}

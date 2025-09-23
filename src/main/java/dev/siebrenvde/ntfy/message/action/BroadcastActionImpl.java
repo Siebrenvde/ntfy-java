@@ -5,7 +5,7 @@ import java.util.Map;
 
 import static dev.siebrenvde.ntfy.internal.Util.checkNotNull;
 
-class BroadcastActionImpl extends AbstractAction implements BroadcastAction {
+final class BroadcastActionImpl extends AbstractAction implements BroadcastAction {
 
     private final String intent;
     private final Map<String, String> extras;

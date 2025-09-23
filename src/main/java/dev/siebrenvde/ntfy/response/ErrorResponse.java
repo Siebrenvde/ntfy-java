@@ -6,7 +6,7 @@ import org.jspecify.annotations.Nullable;
 /**
  * Represents an error returned by the server when a message was not successfully published
  */
-public interface ErrorResponse {
+public sealed interface ErrorResponse permits ErrorResponseImpl {
 
     /**
      * {@return the ntfy error code}

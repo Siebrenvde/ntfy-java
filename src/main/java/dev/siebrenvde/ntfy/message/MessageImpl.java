@@ -26,7 +26,7 @@ record MessageImpl(
     boolean firebase
 ) implements Message {
 
-    static class BuilderImpl implements Message.Builder {
+    static final class BuilderImpl implements Message.Builder {
 
         private @Nullable String body;
         private @Nullable String title;

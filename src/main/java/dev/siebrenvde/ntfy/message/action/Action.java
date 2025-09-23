@@ -7,7 +7,7 @@ import org.jetbrains.annotations.Contract;
  * @see <a href="https://docs.ntfy.sh/publish/#action-buttons">Action buttons</a>
  */
 @SuppressWarnings("unused")
-public interface Action {
+public sealed interface Action permits AbstractAction, BroadcastAction, HttpAction, ViewAction {
 
     /**
      * Creates a new view action with a label, url and whether to clear the notification

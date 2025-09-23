@@ -36,7 +36,7 @@ import java.util.concurrent.CompletableFuture;
 
 import static dev.siebrenvde.ntfy.internal.Util.checkNotNull;
 
-class TopicImpl implements Topic {
+sealed class TopicImpl implements Topic {
 
     private static final HttpClient CLIENT = HttpClient.newHttpClient();
 
@@ -265,7 +265,7 @@ class TopicImpl implements Topic {
         return input;
     }
 
-    static class Secured extends TopicImpl {
+    static final class Secured extends TopicImpl {
 
         private final String header;
 

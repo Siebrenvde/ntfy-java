@@ -2,7 +2,7 @@ package dev.siebrenvde.ntfy.message.action;
 
 import static dev.siebrenvde.ntfy.internal.Util.checkNotNull;
 
-class ViewActionImpl extends AbstractAction implements ViewAction {
+final class ViewActionImpl extends AbstractAction implements ViewAction {
 
     private final String url;
 

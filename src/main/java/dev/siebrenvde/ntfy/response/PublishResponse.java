@@ -8,7 +8,7 @@ import java.time.Instant;
 /**
  * Represents a response from the server when a message was successfully published
  */
-public interface PublishResponse {
+public sealed interface PublishResponse permits PublishResponseImpl {
 
     /**
      * {@return the message id}

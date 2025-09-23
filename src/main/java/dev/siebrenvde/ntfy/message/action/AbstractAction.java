@@ -2,7 +2,7 @@ package dev.siebrenvde.ntfy.message.action;
 
 import static dev.siebrenvde.ntfy.internal.Util.checkNotNull;
 
-abstract class AbstractAction implements Action {
+abstract sealed class AbstractAction implements Action permits BroadcastActionImpl, HttpActionImpl, ViewActionImpl {
 
     private final String label;
     private final boolean clear;

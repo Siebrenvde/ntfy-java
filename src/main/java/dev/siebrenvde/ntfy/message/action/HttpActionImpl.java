@@ -7,7 +7,7 @@ import java.util.Map;
 
 import static dev.siebrenvde.ntfy.internal.Util.checkNotNull;
 
-class HttpActionImpl extends AbstractAction implements HttpAction {
+final class HttpActionImpl extends AbstractAction implements HttpAction {
 
     private final String url;
     private final Method method;
