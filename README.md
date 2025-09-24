@@ -56,7 +56,7 @@ Messages are created using a builder:
 Message message = Message.message()
     .title("Hello, ntfy!")
     .body("This message was sent using ntfy-java.")
-    .tags(Emoji.COFFEE)
+    .tags("coffee")
     .actions(Action.view("Open GitHub", "https://github.com/Siebrenvde/ntfy-java"))
     .build();
 ```
