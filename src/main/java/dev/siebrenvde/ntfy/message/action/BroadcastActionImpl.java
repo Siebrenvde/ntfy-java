@@ -72,7 +72,7 @@ final class BroadcastActionImpl extends AbstractAction implements BroadcastActio
 
         @Override
         public BroadcastAction build() {
-            return new BroadcastActionImpl(label, intent, extras, clear);
+            return new BroadcastActionImpl(label, intent, Map.copyOf(extras), clear);
         }
 
     }

@@ -98,7 +98,7 @@ final class HttpActionImpl extends AbstractAction implements HttpAction {
 
         @Override
         public HttpAction build() {
-            return new HttpActionImpl(label, url, method, headers, body, clear);
+            return new HttpActionImpl(label, url, method, Map.copyOf(headers), body, clear);
         }
 
     }
