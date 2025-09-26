@@ -5,9 +5,13 @@ import dev.siebrenvde.ntfy.response.ErrorResponse;
 import dev.siebrenvde.ntfy.response.PublishResponse;
 import dev.siebrenvde.ntfy.util.Result;
 import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.time.Duration;
 import java.time.Instant;
 import java.time.temporal.TemporalUnit;
 import java.util.concurrent.CompletableFuture;
@@ -15,57 +19,18 @@ import java.util.concurrent.CompletableFuture;
 /**
  * Represents a topic to publish messages to
  */
-@SuppressWarnings("unused")
 public sealed interface Topic permits TopicImpl {
 
     String DEFAULT_HOST = "https://ntfy.sh";
 
     /**
-     * Creates a new topic
-     * @param host the host
+     * Creates a new topic builder
      * @param name the topic name
-     * @return a new topic
+     * @return a topic builder
      */
-    @Contract(value = "_, _ -> new", pure = true)
-    static Topic topic(String host, String name) {
-        return new TopicImpl(host, name);
-    }
-
-    /**
-     * Creates a new topic using the default host (ntfy.sh)
-     * @param name the topic name
-     * @return a new topic
-     * @see Topic#DEFAULT_HOST
-     */
-    static Topic topic(String name) {
-        return new TopicImpl(DEFAULT_HOST, name);
-    }
-
-    /**
-     * Creates a new protected topic using basic authentication
-     * @param host the host
-     * @param name the topic name
-     * @param username the username
-     * @param password the password
-     * @return a new topic
-     * @see <a href="https://docs.ntfy.sh/publish/#username-password">Authentication - Username + password</a>
-     */
-    @Contract(value = "_, _, _, _ -> new", pure = true)
-    static Topic secured(String host, String name, String username, String password) {
-        return new TopicImpl.Secured(host, name, username, password);
-    }
-
-    /**
-     * Creates a new protected topic using an access token
-     * @param host the host
-     * @param name the topic name
-     * @param token the access token
-     * @return a new topic
-     * @see <a href="https://docs.ntfy.sh/publish/#access-tokens">Authentication - Access tokens</a>
-     */
-    @Contract(value = "_, _, _ -> new", pure = true)
-    static Topic secured(String host, String name, String token) {
-        return new TopicImpl.Secured(host, name, token);
+    @Contract(value = "_ -> new", pure = true)
+    static Builder topic(String name) {
+        return new TopicImpl.BuilderImpl(name);
     }
 
     /**
@@ -267,6 +232,88 @@ public sealed interface Topic permits TopicImpl {
      */
     default CompletableFuture<Result<PublishResponse, ErrorResponse>> scheduleInAsync(String message, long delay, TemporalUnit unit) throws FileNotFoundException {
         return scheduleInAsync(Message.message(message), delay, unit);
+    }
+
+    /**
+     * Builder for {@link Topic}
+     */
+    sealed interface Builder permits TopicImpl.BuilderImpl {
+
+        /**
+         * Sets the host
+         * <p>
+         * If no host is provided the default host (ntfy.sh) is used
+         * @param host the host
+         * @return the builder
+         * @see Topic#DEFAULT_HOST
+         */
+        @Contract(value = "_ -> this", mutates = "this")
+        Builder host(String host);
+
+        /**
+         * Sets the http client
+         * @param client the http client
+         * @return the builder
+         */
+        @Contract(value = "_ -> this", mutates = "this")
+        Builder httpClient(HttpClient client);
+
+        /**
+         * Sets the timeout used when publishing a message
+         * <p>
+         * Must be positive and non-zero
+         * @param timeout the timeout
+         * @return the builder
+         * @see HttpRequest.Builder#timeout(Duration)
+         */
+        @Contract(value = "_ -> this", mutates = "this")
+        Builder timeout(@Nullable Duration timeout);
+
+
+        /**
+         * Sets the access token to use for bearer authentication
+         * <p>
+         * Cannot be used together with {@link #username(String)} and {@link #password(String)}
+         * @param token the token
+         * @return the builder
+         * @see <a href="https://docs.ntfy.sh/publish/#access-tokens">Authentication - Access tokens</a>
+         */
+        @Contract(value = "_ -> this", mutates = "this")
+        Builder token(String token);
+
+        /**
+         * Sets the username to use for basic authentication
+         * <p>
+         * Must be used together with {@link #password(String)}
+         * <p>
+         * Cannot be used together with {@link #token(String)}
+         * @param username the username
+         * @return the builder
+         * @see <a href="https://docs.ntfy.sh/publish/#username-password">Authentication - Username + password</a>
+         */
+        @Contract(value = "_ -> this", mutates = "this")
+        Builder username(String username);
+
+        /**
+         * Sets the password to use for basic authentication
+         * <p>
+         * Must be used together with {@link #username(String)}
+         * <p>
+         * Cannot be used together with {@link #token(String)}
+         * @param password the password
+         * @return the builder
+         * @see <a href="https://docs.ntfy.sh/publish/#username-password">Authentication - Username + password</a>
+         */
+        @Contract(value = "_ -> this", mutates = "this")
+        Builder password(String password);
+
+        /**
+         * Builds the topic
+         * @return a new topic
+         */
+        @Contract(value = "-> new", pure = true)
+        Topic build();
+
     }
 
 }

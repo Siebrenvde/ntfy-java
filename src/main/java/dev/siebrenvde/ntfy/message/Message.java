@@ -135,7 +135,6 @@ public sealed interface Message permits MessageImpl {
     /**
      * Builder for {@link Message}
      */
-    @SuppressWarnings("unused")
     sealed interface Builder permits MessageImpl.BuilderImpl {
 
         /**

@@ -28,7 +28,6 @@ public sealed interface BroadcastAction extends Action permits BroadcastActionIm
     /**
      * Builder for {@link BroadcastAction}
      */
-    @SuppressWarnings("unused")
     interface Builder {
 
         /**

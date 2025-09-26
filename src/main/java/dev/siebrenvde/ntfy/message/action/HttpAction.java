@@ -56,7 +56,6 @@ public sealed interface HttpAction extends Action permits HttpActionImpl {
     /**
      * Builder for {@link HttpAction}
      */
-    @SuppressWarnings("unused")
     interface Builder {
 
         /**

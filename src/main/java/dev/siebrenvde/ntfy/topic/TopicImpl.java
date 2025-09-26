@@ -25,6 +25,7 @@ import java.net.http.HttpRequest.BodyPublishers;
 import java.net.http.HttpResponse;
 import java.net.http.HttpResponse.BodyHandlers;
 import java.nio.charset.StandardCharsets;
+import java.time.Duration;
 import java.time.Instant;
 import java.time.temporal.TemporalUnit;
 import java.util.ArrayList;
@@ -34,19 +35,20 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
+import static dev.siebrenvde.ntfy.internal.Util.checkArgument;
 import static dev.siebrenvde.ntfy.internal.Util.checkNotNull;
 
 sealed class TopicImpl implements Topic {
 
-    private static final HttpClient CLIENT = HttpClient.newHttpClient();
+    private static final HttpClient DEFAULT_CLIENT = HttpClient.newHttpClient();
 
     private final String host;
     private final String name;
     private final URI uri;
+    private final HttpClient client;
+    private final @Nullable Duration timeout;
 
-    TopicImpl(String host, String name) {
-        checkNotNull(host, "host");
-        checkNotNull(name, "name");
+    TopicImpl(String host, String name, HttpClient client, @Nullable Duration timeout) {
         this.host = host;
         this.name = name;
         try {
@@ -54,8 +56,10 @@ sealed class TopicImpl implements Topic {
             //noinspection ResultOfMethodCallIgnored
             this.uri.toURL();
         } catch (URISyntaxException | MalformedURLException e) {
-            throw new IllegalArgumentException("invalid topic '" + host + "'", e);
+            throw new IllegalArgumentException("invalid topic '" + name + "'", e);
         }
+        this.client = client;
+        this.timeout = timeout;
     }
 
     @Override
@@ -99,7 +103,7 @@ sealed class TopicImpl implements Topic {
     }
 
     private Result<PublishResponse, ErrorResponse> sendRequest(Message message, @Nullable Instant time) throws IOException, InterruptedException {
-        HttpResponse<String> response = CLIENT.send(createRequest(message, time), BodyHandlers.ofString());
+        HttpResponse<String> response = client.send(createRequest(message, time), BodyHandlers.ofString());
         if (response.statusCode() == 200) {
             return Result.success(PublishResponse.fromJson(response.body()));
         } else {
@@ -108,7 +112,7 @@ sealed class TopicImpl implements Topic {
     }
 
     private CompletableFuture<Result<PublishResponse, ErrorResponse>> sendRequestAsync(Message message, @Nullable Instant time) throws FileNotFoundException {
-        return CLIENT.sendAsync(createRequest(message, time), BodyHandlers.ofString())
+        return client.sendAsync(createRequest(message, time), BodyHandlers.ofString())
             .thenApply(response -> {
                 if (response.statusCode() == 200) {
                     return Result.success(PublishResponse.fromJson(response.body()));
@@ -248,8 +252,12 @@ sealed class TopicImpl implements Topic {
             builder.header("Delay", String.valueOf(time.getEpochSecond()));
         }
 
-        if (this instanceof Secured auth) {
+        if (this instanceof Protected auth) {
             builder.header("Authorization", auth.header);
+        }
+
+        if (timeout != null) {
+            builder.timeout(timeout);
         }
 
         return builder.build();
@@ -265,18 +273,101 @@ sealed class TopicImpl implements Topic {
         return input;
     }
 
-    static final class Secured extends TopicImpl {
+    static final class Protected extends TopicImpl {
 
         private final String header;
 
-        Secured(String host, String name, String username, String password) {
-            super(host, name);
+        Protected(String host, String name, HttpClient client, @Nullable Duration timeout, String username, String password) {
+            super(host, name, client, timeout);
             this.header = "Basic " + Base64.getEncoder().encodeToString((username + ":" + password).getBytes(StandardCharsets.UTF_8));
         }
 
-        Secured(String host, String name, String token) {
-            super(host, name);
+        Protected(String host, String name, HttpClient client, @Nullable Duration timeout, String token) {
+            super(host, name, client, timeout);
             this.header = "Bearer " + token;
+        }
+
+    }
+
+    static final class BuilderImpl implements Topic.Builder {
+
+        private String host = Topic.DEFAULT_HOST;
+        private final String name;
+        private HttpClient client = DEFAULT_CLIENT;
+        private @Nullable Duration timeout;
+        private @Nullable String token;
+        private @Nullable String username;
+        private @Nullable String password;
+
+        BuilderImpl(String name) {
+            checkNotNull(name, "name");
+            this.name = name;
+        }
+
+        @Override
+        public Builder host(String host) {
+            checkNotNull(host, "host");
+            this.host = host;
+            return this;
+        }
+
+        @Override
+        public Builder httpClient(HttpClient client) {
+            checkNotNull(client, "client");
+            this.client = client;
+            return this;
+        }
+
+        @Override
+        public Builder timeout(@Nullable Duration timeout) {
+            if (timeout != null) {
+                checkArgument(!timeout.isNegative(), "timeout must be positive");
+                checkArgument(!timeout.isZero(), "timeout must not be zero");
+            }
+            this.timeout = timeout;
+            return this;
+        }
+
+        @Override
+        public Builder token(String token) {
+            checkNotNull(token, "token");
+            this.token = token;
+            return this;
+        }
+
+        @Override
+        public Builder username(String username) {
+            checkNotNull(username, "username");
+            this.username = username;
+            return this;
+        }
+
+        @Override
+        public Builder password(String password) {
+            checkNotNull(password, "password");
+            this.password = password;
+            return this;
+        }
+
+        @Override
+        public Topic build() {
+            if (token == null && username == null && password == null) {
+                return new TopicImpl(host, name, client, timeout);
+            }
+            if (token != null && (username != null || password != null)) {
+                throw new IllegalStateException("Topic cannot have both token and basic authentication");
+            }
+            if (token != null) {
+                return new Protected(host, name, client, timeout, token);
+            }
+            if (username != null && password != null) {
+                return new Protected(host, name, client, timeout, username, password);
+            }
+            throw new IllegalStateException(
+                (username != null ? "Username" : "Password")
+                    + " provided without "
+                    + (username != null ? "password" : "username")
+            );
         }
 
     }

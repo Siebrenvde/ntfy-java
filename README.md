@@ -40,10 +40,12 @@ dependencies {
 Getting a topic:
 ```java
 // Using the default host (ntfy.sh)
-Topic topic = Topic.topic("topic-name");
+Topic topic = Topic.topic("topic-name").build();
 
 // Using a custom host
-Topic topic = Topic.topic("https://ntfy.example.com", "topic-name");
+Topic topic = Topic.topic("topic-name")
+    .host("https://ntfy.example.com")
+    .build();
 ```
 
 Publishing a simple message:

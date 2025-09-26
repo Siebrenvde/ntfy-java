@@ -5,7 +5,6 @@ import dev.siebrenvde.ntfy.message.attachment.Attachment;
 import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import static dev.siebrenvde.ntfy.internal.Util.checkNotNull;

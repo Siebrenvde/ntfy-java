@@ -6,7 +6,6 @@ import org.jetbrains.annotations.Contract;
  * Represents an action button
  * @see <a href="https://docs.ntfy.sh/publish/#action-buttons">Action buttons</a>
  */
-@SuppressWarnings("unused")
 public sealed interface Action permits AbstractAction, BroadcastAction, HttpAction, ViewAction {
 
     /**
