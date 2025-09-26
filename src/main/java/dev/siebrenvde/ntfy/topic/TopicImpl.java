@@ -88,17 +88,17 @@ sealed class TopicImpl implements Topic {
     }
 
     @Override
-    public CompletableFuture<Result<PublishResponse, ErrorResponse>> publishAsync(Message message) throws FileNotFoundException {
+    public CompletableFuture<Result<PublishResponse, ErrorResponse>> publishAsync(Message message) {
         return sendRequestAsync(message, null);
     }
 
     @Override
-    public CompletableFuture<Result<PublishResponse, ErrorResponse>> scheduleAtAsync(Message message, Instant time) throws FileNotFoundException {
+    public CompletableFuture<Result<PublishResponse, ErrorResponse>> scheduleAtAsync(Message message, Instant time) {
         return sendRequestAsync(message, time);
     }
 
     @Override
-    public CompletableFuture<Result<PublishResponse, ErrorResponse>> scheduleInAsync(Message message, long delay, TemporalUnit unit) throws FileNotFoundException {
+    public CompletableFuture<Result<PublishResponse, ErrorResponse>> scheduleInAsync(Message message, long delay, TemporalUnit unit) {
         return sendRequestAsync(message, Instant.now().plus(delay, unit));
     }
 
@@ -111,8 +111,14 @@ sealed class TopicImpl implements Topic {
         }
     }
 
-    private CompletableFuture<Result<PublishResponse, ErrorResponse>> sendRequestAsync(Message message, @Nullable Instant time) throws FileNotFoundException {
-        return client.sendAsync(createRequest(message, time), BodyHandlers.ofString())
+    private CompletableFuture<Result<PublishResponse, ErrorResponse>> sendRequestAsync(Message message, @Nullable Instant time) {
+        HttpRequest request;
+        try {
+            request = createRequest(message, time);
+        } catch (FileNotFoundException e) {
+            return CompletableFuture.failedFuture(e);
+        }
+        return client.sendAsync(request, BodyHandlers.ofString())
             .thenApply(response -> {
                 if (response.statusCode() == 200) {
                     return Result.success(PublishResponse.fromJson(response.body()));
