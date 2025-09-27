@@ -47,6 +47,15 @@ final class HttpActionImpl extends AbstractAction implements HttpAction {
         return body;
     }
 
+    @Override
+    public Builder toBuilder() {
+        return new BuilderImpl(label(), url)
+            .method(method)
+            .headers(headers)
+            .body(body)
+            .clear(clear());
+    }
+
     static class BuilderImpl implements HttpAction.Builder {
 
         private final String label;
@@ -85,7 +94,7 @@ final class HttpActionImpl extends AbstractAction implements HttpAction {
         }
 
         @Override
-        public Builder body(String body) {
+        public Builder body(@Nullable String body) {
             this.body = body;
             return this;
         }

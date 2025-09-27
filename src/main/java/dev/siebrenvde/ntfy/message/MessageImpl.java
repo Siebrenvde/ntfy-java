@@ -25,6 +25,24 @@ record MessageImpl(
     boolean firebase
 ) implements Message {
 
+    @Override
+    public Builder toBuilder() {
+        return new BuilderImpl()
+            .body(body)
+            .title(title)
+            .priority(priority)
+            .tags(tags)
+            .markdown(markdown)
+            .actions(actions)
+            .clickAction(clickAction)
+            .attachment(attachment)
+            .icon(icon)
+            .email(email)
+            .phone(phone)
+            .cache(cache)
+            .firebase(firebase);
+    }
+
     static final class BuilderImpl implements Message.Builder {
 
         private @Nullable String body;

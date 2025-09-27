@@ -226,6 +226,15 @@ public sealed interface Topic permits TopicImpl {
     }
 
     /**
+     * Creates a new builder from this topic
+     * <p>
+     * Does not copy token, username or password
+     * @return a new builder
+     */
+    @Contract(value = "-> new", pure = true)
+    Builder toBuilder();
+
+    /**
      * Builder for {@link Topic}
      */
     sealed interface Builder permits TopicImpl.BuilderImpl {

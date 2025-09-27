@@ -133,6 +133,13 @@ public sealed interface Message permits MessageImpl {
     boolean firebase();
 
     /**
+     * Creates a new builder from this message
+     * @return a new builder
+     */
+    @Contract(value = "-> new", pure = true)
+    Builder toBuilder();
+
+    /**
      * Builder for {@link Message}
      */
     sealed interface Builder permits MessageImpl.BuilderImpl {

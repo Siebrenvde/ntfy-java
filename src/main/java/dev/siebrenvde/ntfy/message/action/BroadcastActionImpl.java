@@ -31,6 +31,14 @@ final class BroadcastActionImpl extends AbstractAction implements BroadcastActio
         return extras;
     }
 
+    @Override
+    public Builder toBuilder() {
+        return new BuilderImpl(label())
+            .intent(intent)
+            .extras(extras)
+            .clear(clear());
+    }
+
     static class BuilderImpl implements BroadcastAction.Builder {
 
         private final String label;

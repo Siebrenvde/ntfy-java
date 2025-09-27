@@ -39,6 +39,13 @@ public sealed interface HttpAction extends Action permits HttpActionImpl {
     @Nullable String body();
 
     /**
+     * Creates a new builder from this action
+     * @return a new builder
+     */
+    @Contract(value = "-> new", pure = true)
+    Builder toBuilder();
+
+    /**
      * An enum representing the available request methods
      */
     enum Method {
@@ -89,7 +96,7 @@ public sealed interface HttpAction extends Action permits HttpActionImpl {
          * @return the builder
          */
         @Contract(value = "_ -> this", mutates = "this")
-        Builder body(String body);
+        Builder body(@Nullable String body);
 
         /**
          * Sets whether to clear the notification after the button is tapped

@@ -102,6 +102,14 @@ sealed class TopicImpl implements Topic {
         return sendRequestAsync(message, Instant.now().plus(delay, unit));
     }
 
+    @Override
+    public Builder toBuilder() {
+        return new BuilderImpl(name)
+            .host(host)
+            .httpClient(client)
+            .timeout(timeout);
+    }
+
     private Result<PublishResponse, ErrorResponse> sendRequest(Message message, @Nullable Instant time) throws IOException, InterruptedException {
         HttpResponse<String> response = client.send(createRequest(message, time), BodyHandlers.ofString());
         if (response.statusCode() == 200) {

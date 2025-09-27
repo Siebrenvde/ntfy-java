@@ -26,6 +26,13 @@ public sealed interface BroadcastAction extends Action permits BroadcastActionIm
     @Unmodifiable Map<String, String> extras();
 
     /**
+     * Creates a new builder from this action
+     * @return a new builder
+     */
+    @Contract(value = "-> new", pure = true)
+    Builder toBuilder();
+
+    /**
      * Builder for {@link BroadcastAction}
      */
     interface Builder {
