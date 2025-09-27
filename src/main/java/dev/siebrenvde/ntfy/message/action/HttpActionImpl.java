@@ -81,7 +81,11 @@ final class HttpActionImpl extends AbstractAction implements HttpAction {
         @Override
         public Builder headers(Map<String, String> headers) {
             checkNotNull(headers, "headers");
-            this.headers = headers;
+            for (Map.Entry<String, String> header : headers.entrySet()) {
+                checkNotNull(header.getKey(), "key of header in headers");
+                checkNotNull(header.getValue(), "value of header in headers");
+            }
+            this.headers = new HashMap<>(headers);
             return this;
         }
 

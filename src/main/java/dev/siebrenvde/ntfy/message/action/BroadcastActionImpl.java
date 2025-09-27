@@ -60,6 +60,10 @@ final class BroadcastActionImpl extends AbstractAction implements BroadcastActio
         @Override
         public Builder extras(Map<String, String> extras) {
             checkNotNull(extras, "extras");
+            for (Map.Entry<String, String> extra : extras.entrySet()) {
+                checkNotNull(extra.getKey(), "key of extra in extras");
+                checkNotNull(extra.getValue(), "value of extra in extras");
+            }
             this.extras = new HashMap<>(extras);
             return this;
         }

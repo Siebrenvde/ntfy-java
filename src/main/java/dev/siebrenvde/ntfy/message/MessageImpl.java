@@ -81,6 +81,7 @@ record MessageImpl(
         @Override
         public Builder tags(String... tags) {
             checkNotNull(tags, "tags");
+            for (String tag : tags) checkNotNull(tag, "tag in tags");
             this.tags = new ArrayList<>(List.of(tags));
             return this;
         }
@@ -88,6 +89,7 @@ record MessageImpl(
         @Override
         public Builder tags(List<String> tags) {
             checkNotNull(tags, "tags");
+            for (String tag : tags) checkNotNull(tag, "tag in tags");
             this.tags = new ArrayList<>(tags);
             return this;
         }
@@ -108,6 +110,7 @@ record MessageImpl(
         @Override
         public Builder actions(Action... actions) {
             checkNotNull(actions, "actions");
+            for (Action action : actions) checkNotNull(action, "action in actions");
             this.actions = new ArrayList<>(List.of(actions));
             return this;
         }
@@ -115,6 +118,7 @@ record MessageImpl(
         @Override
         public Builder actions(List<Action> actions) {
             checkNotNull(actions, "actions");
+            for (Action action : actions) checkNotNull(action, "action in actions");
             this.actions = new ArrayList<>(actions);
             return this;
         }
