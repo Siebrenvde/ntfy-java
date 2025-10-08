@@ -2,6 +2,7 @@ plugins {
     id("java-library")
     id("maven-publish")
     alias(libs.plugins.indra)
+    alias(libs.plugins.indra.checkstyle)
 }
 
 repositories {
@@ -18,6 +19,7 @@ indra {
     javaVersions {
         target(17)
     }
+    checkstyle("11.1.0")
 }
 
 publishing {

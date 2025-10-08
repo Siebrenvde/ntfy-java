@@ -21,7 +21,7 @@ class ResultImpl {
 
         @Override
         public Optional<VALUE> value() {
-            return Optional.of(_value);
+            return Optional.of(this._value);
         }
 
         @Override
@@ -30,18 +30,18 @@ class ResultImpl {
         }
 
         @Override
-        public <E extends Throwable> VALUE getOrThrow(Function<String, E> exceptionSupplier) {
-            return _value;
+        public <E extends Throwable> VALUE getOrThrow(final Function<String, E> exceptionSupplier) {
+            return this._value;
         }
 
         @Override
-        public Result<VALUE, ERROR> ifSuccess(Consumer<? super VALUE> valueConsumer) {
-            valueConsumer.accept(_value);
+        public Result<VALUE, ERROR> ifSuccess(final Consumer<? super VALUE> valueConsumer) {
+            valueConsumer.accept(this._value);
             return this;
         }
 
         @Override
-        public Result<VALUE, ERROR> ifError(Consumer<? super ERROR> errorConsumer) {
+        public Result<VALUE, ERROR> ifError(final Consumer<? super ERROR> errorConsumer) {
             return this;
         }
 
@@ -65,22 +65,22 @@ class ResultImpl {
 
         @Override
         public Optional<ERROR> error() {
-            return Optional.of(_error);
+            return Optional.of(this._error);
         }
 
         @Override
-        public <E extends Throwable> VALUE getOrThrow(Function<String, E> exceptionSupplier) throws E {
+        public <E extends Throwable> VALUE getOrThrow(final Function<String, E> exceptionSupplier) throws E {
             throw exceptionSupplier.apply("Error result does not have a value");
         }
 
         @Override
-        public Result<VALUE, ERROR> ifSuccess(Consumer<? super VALUE> valueConsumer) {
+        public Result<VALUE, ERROR> ifSuccess(final Consumer<? super VALUE> valueConsumer) {
             return this;
         }
 
         @Override
-        public Result<VALUE, ERROR> ifError(Consumer<? super ERROR> errorConsumer) {
-            errorConsumer.accept(_error);
+        public Result<VALUE, ERROR> ifError(final Consumer<? super ERROR> errorConsumer) {
+            errorConsumer.accept(this._error);
             return this;
         }
 

@@ -9,19 +9,19 @@ import org.jspecify.annotations.Nullable;
 import java.time.Instant;
 
 @ApiStatus.Internal
-public class Util {
+public final class Util {
 
     public static final Gson GSON = new GsonBuilder()
         .registerTypeAdapter(Instant.class, new InstantAdapter().nullSafe())
         .create();
 
     @Contract("null, _ -> fail")
-    public static void checkNotNull(@Nullable Object object, String name) {
+    public static void checkNotNull(final @Nullable Object object, final String name) {
         if (object == null) throw new IllegalArgumentException(name + " cannot be null");
     }
 
     @Contract("false, _ -> fail")
-    public static void checkArgument(boolean condition, String message) {
+    public static void checkArgument(final boolean condition, final String message) {
         if (!condition) throw new IllegalArgumentException(message);
     }
 

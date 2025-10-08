@@ -38,7 +38,7 @@ import java.util.concurrent.CompletableFuture;
 import static dev.siebrenvde.ntfy.internal.Util.checkArgument;
 import static dev.siebrenvde.ntfy.internal.Util.checkNotNull;
 
-sealed class TopicImpl implements Topic {
+sealed class TopicImpl implements Topic permits TopicImpl.Protected {
 
     private static final HttpClient DEFAULT_CLIENT = HttpClient.newHttpClient();
 
@@ -48,14 +48,14 @@ sealed class TopicImpl implements Topic {
     private final HttpClient client;
     private final @Nullable Duration timeout;
 
-    TopicImpl(String host, String name, HttpClient client, @Nullable Duration timeout) {
+    TopicImpl(final String host, final String name, final HttpClient client, @Nullable final Duration timeout) {
         this.host = host;
         this.name = name;
         try {
             this.uri = new URI(host).resolve(name);
             //noinspection ResultOfMethodCallIgnored
             this.uri.toURL();
-        } catch (URISyntaxException | MalformedURLException e) {
+        } catch (final URISyntaxException | MalformedURLException e) {
             throw new IllegalArgumentException("invalid topic '" + name + "'", e);
         }
         this.client = client;
@@ -64,54 +64,54 @@ sealed class TopicImpl implements Topic {
 
     @Override
     public String host() {
-        return host;
+        return this.host;
     }
 
     @Override
     public String name() {
-        return name;
+        return this.name;
     }
 
     @Override
-    public Result<PublishResponse, ErrorResponse> publish(Message message) throws IOException, InterruptedException {
-        return sendRequest(message, null);
+    public Result<PublishResponse, ErrorResponse> publish(final Message message) throws IOException, InterruptedException {
+        return this.sendRequest(message, null);
     }
 
     @Override
-    public Result<PublishResponse, ErrorResponse> scheduleAt(Message message, Instant time) throws IOException, InterruptedException {
-        return sendRequest(message, time);
+    public Result<PublishResponse, ErrorResponse> scheduleAt(final Message message, final Instant time) throws IOException, InterruptedException {
+        return this.sendRequest(message, time);
     }
 
     @Override
-    public Result<PublishResponse, ErrorResponse> scheduleIn(Message message, long delay, TemporalUnit unit) throws IOException, InterruptedException {
-        return sendRequest(message, Instant.now().plus(delay, unit));
+    public Result<PublishResponse, ErrorResponse> scheduleIn(final Message message, final long delay, final TemporalUnit unit) throws IOException, InterruptedException {
+        return this.sendRequest(message, Instant.now().plus(delay, unit));
     }
 
     @Override
-    public CompletableFuture<Result<PublishResponse, ErrorResponse>> publishAsync(Message message) {
-        return sendRequestAsync(message, null);
+    public CompletableFuture<Result<PublishResponse, ErrorResponse>> publishAsync(final Message message) {
+        return this.sendRequestAsync(message, null);
     }
 
     @Override
-    public CompletableFuture<Result<PublishResponse, ErrorResponse>> scheduleAtAsync(Message message, Instant time) {
-        return sendRequestAsync(message, time);
+    public CompletableFuture<Result<PublishResponse, ErrorResponse>> scheduleAtAsync(final Message message, final Instant time) {
+        return this.sendRequestAsync(message, time);
     }
 
     @Override
-    public CompletableFuture<Result<PublishResponse, ErrorResponse>> scheduleInAsync(Message message, long delay, TemporalUnit unit) {
-        return sendRequestAsync(message, Instant.now().plus(delay, unit));
+    public CompletableFuture<Result<PublishResponse, ErrorResponse>> scheduleInAsync(final Message message, final long delay, final TemporalUnit unit) {
+        return this.sendRequestAsync(message, Instant.now().plus(delay, unit));
     }
 
     @Override
     public Builder toBuilder() {
-        return new BuilderImpl(name)
-            .host(host)
-            .httpClient(client)
-            .timeout(timeout);
+        return new BuilderImpl(this.name)
+            .host(this.host)
+            .httpClient(this.client)
+            .timeout(this.timeout);
     }
 
-    private Result<PublishResponse, ErrorResponse> sendRequest(Message message, @Nullable Instant time) throws IOException, InterruptedException {
-        HttpResponse<String> response = client.send(createRequest(message, time), BodyHandlers.ofString());
+    private Result<PublishResponse, ErrorResponse> sendRequest(final Message message, @Nullable final Instant time) throws IOException, InterruptedException {
+        final HttpResponse<String> response = this.client.send(this.createRequest(message, time), BodyHandlers.ofString());
         if (response.statusCode() == 200) {
             return Result.success(PublishResponse.fromJson(response.body()));
         } else {
@@ -119,14 +119,14 @@ sealed class TopicImpl implements Topic {
         }
     }
 
-    private CompletableFuture<Result<PublishResponse, ErrorResponse>> sendRequestAsync(Message message, @Nullable Instant time) {
-        HttpRequest request;
+    private CompletableFuture<Result<PublishResponse, ErrorResponse>> sendRequestAsync(final Message message, @Nullable final Instant time) {
+        final HttpRequest request;
         try {
-            request = createRequest(message, time);
-        } catch (FileNotFoundException e) {
+            request = this.createRequest(message, time);
+        } catch (final FileNotFoundException e) {
             return CompletableFuture.failedFuture(e);
         }
-        return client.sendAsync(request, BodyHandlers.ofString())
+        return this.client.sendAsync(request, BodyHandlers.ofString())
             .thenApply(response -> {
                 if (response.statusCode() == 200) {
                     return Result.success(PublishResponse.fromJson(response.body()));
@@ -137,15 +137,15 @@ sealed class TopicImpl implements Topic {
     }
 
     @SuppressWarnings("UastIncorrectHttpHeaderInspection")
-    private HttpRequest createRequest(Message message, @Nullable Instant time) throws FileNotFoundException {
-        HttpRequest.Builder builder = HttpRequest.newBuilder(uri);
+    private HttpRequest createRequest(final Message message, @Nullable final Instant time) throws FileNotFoundException {
+        final HttpRequest.Builder builder = HttpRequest.newBuilder(this.uri);
 
         if (message.body() != null) {
-            builder.header("Message", encodeBase64(message.body()));
+            builder.header("Message", this.encodeBase64(message.body()));
         }
 
         if (message.title() != null) {
-            builder.header("Title", encodeBase64(message.title()));
+            builder.header("Title", this.encodeBase64(message.title()));
         }
 
         if (message.priority() != Priority.DEFAULT) {
@@ -153,7 +153,7 @@ sealed class TopicImpl implements Topic {
         }
 
         if (!message.tags().isEmpty()) {
-            builder.header("Tags", encodeBase64(String.join(",", message.tags())));
+            builder.header("Tags", this.encodeBase64(String.join(",", message.tags())));
         }
 
         if (message.markdown()) {
@@ -161,20 +161,18 @@ sealed class TopicImpl implements Topic {
         }
 
         if (!message.actions().isEmpty()) {
-            List<String> actions = new ArrayList<>();
+            final List<String> actions = new ArrayList<>();
 
-            for (Action action : message.actions()) {
-                Map<String, String> parts = new HashMap<>();
+            for (final Action action : message.actions()) {
+                final Map<String, String> parts = new HashMap<>();
 
                 parts.put("action", action.action());
                 parts.put("label", action.label());
                 if (action.clear()) parts.put("clear", "true");
 
-                if (action instanceof ViewAction view) {
+                if (action instanceof final ViewAction view) {
                     parts.put("url", view.url());
-                }
-
-                else if (action instanceof BroadcastAction broadcast) {
+                } else if (action instanceof final BroadcastAction broadcast) {
                     if (!broadcast.intent().equals(BroadcastAction.DEFAULT_INTENT)) {
                         parts.put("intent", broadcast.intent());
                     }
@@ -182,9 +180,7 @@ sealed class TopicImpl implements Topic {
                     if (!broadcast.extras().isEmpty()) {
                         broadcast.extras().forEach((key, value) -> parts.put("extras." + key, value));
                     }
-                }
-
-                else if (action instanceof HttpAction http) {
+                } else if (action instanceof final HttpAction http) {
                     parts.put("url", http.url());
 
                     if (http.method() != HttpAction.DEFAULT_METHOD) {
@@ -213,29 +209,27 @@ sealed class TopicImpl implements Topic {
                 ));
             }
 
-            builder.header("Actions", encodeBase64(String.join(";", actions)));
+            builder.header("Actions", this.encodeBase64(String.join(";", actions)));
         }
 
         if (message.clickAction() != null) {
-            builder.header("Click", encodeBase64(message.clickAction()));
+            builder.header("Click", this.encodeBase64(message.clickAction()));
         }
 
-        Attachment attachment = message.attachment();
+        final Attachment attachment = message.attachment();
         if (attachment != null) {
             if (attachment.fileName() != null) {
-                builder.header("Filename", encodeBase64(attachment.fileName()));
+                builder.header("Filename", this.encodeBase64(attachment.fileName()));
             }
 
-            if (attachment instanceof UrlAttachment url) {
-                builder.header("Attach", encodeBase64(url.url()));
+            if (attachment instanceof final UrlAttachment url) {
+                builder.header("Attach", this.encodeBase64(url.url()));
                 builder.POST(BodyPublishers.noBody());
-            }
-
-            else if (attachment instanceof FileAttachment file) {
+            } else if (attachment instanceof final FileAttachment file) {
                 builder.PUT(BodyPublishers.ofFile(file.file()));
 
                 if (file.fileName() == null) {
-                    builder.header("Filename", encodeBase64(file.file().getFileName().toString()));
+                    builder.header("Filename", this.encodeBase64(file.file().getFileName().toString()));
                 }
             }
         } else {
@@ -243,15 +237,15 @@ sealed class TopicImpl implements Topic {
         }
 
         if (message.icon() != null) {
-            builder.header("Icon", encodeBase64(message.icon()));
+            builder.header("Icon", this.encodeBase64(message.icon()));
         }
 
         if (message.email() != null) {
-            builder.header("Email", encodeBase64(message.email()));
+            builder.header("Email", this.encodeBase64(message.email()));
         }
 
         if (message.phone() != null) {
-            builder.header("Call", encodeBase64(message.phone()));
+            builder.header("Call", this.encodeBase64(message.phone()));
         }
 
         if (!message.cache()) {
@@ -266,20 +260,20 @@ sealed class TopicImpl implements Topic {
             builder.header("Delay", String.valueOf(time.getEpochSecond()));
         }
 
-        if (this instanceof Protected auth) {
+        if (this instanceof final Protected auth) {
             builder.header("Authorization", auth.header);
         }
 
-        if (timeout != null) {
-            builder.timeout(timeout);
+        if (this.timeout != null) {
+            builder.timeout(this.timeout);
         }
 
         return builder.build();
     }
 
-    private String encodeBase64(String input) {
+    private String encodeBase64(final String input) {
         for (int i = 0; i < input.length(); i++) {
-            int c = input.codePointAt(i);
+            final int c = input.codePointAt(i);
             if (c < 32 || c > 126) {
                 return "=?UTF-8?B?" + Base64.getEncoder().encodeToString(input.getBytes(StandardCharsets.UTF_8)) + "?=";
             }
@@ -291,12 +285,12 @@ sealed class TopicImpl implements Topic {
 
         private final String header;
 
-        Protected(String host, String name, HttpClient client, @Nullable Duration timeout, String username, String password) {
+        Protected(final String host, final String name, final HttpClient client, @Nullable final Duration timeout, final String username, final String password) {
             super(host, name, client, timeout);
             this.header = "Basic " + Base64.getEncoder().encodeToString((username + ":" + password).getBytes(StandardCharsets.UTF_8));
         }
 
-        Protected(String host, String name, HttpClient client, @Nullable Duration timeout, String token) {
+        Protected(final String host, final String name, final HttpClient client, @Nullable final Duration timeout, final String token) {
             super(host, name, client, timeout);
             this.header = "Bearer " + token;
         }
@@ -313,27 +307,27 @@ sealed class TopicImpl implements Topic {
         private @Nullable String username;
         private @Nullable String password;
 
-        BuilderImpl(String name) {
+        BuilderImpl(final String name) {
             checkNotNull(name, "name");
             this.name = name;
         }
 
         @Override
-        public Builder host(String host) {
+        public Builder host(final String host) {
             checkNotNull(host, "host");
             this.host = host;
             return this;
         }
 
         @Override
-        public Builder httpClient(HttpClient client) {
+        public Builder httpClient(final HttpClient client) {
             checkNotNull(client, "client");
             this.client = client;
             return this;
         }
 
         @Override
-        public Builder timeout(@Nullable Duration timeout) {
+        public Builder timeout(@Nullable final Duration timeout) {
             if (timeout != null) {
                 checkArgument(!timeout.isNegative(), "timeout must be positive");
                 checkArgument(!timeout.isZero(), "timeout must not be zero");
@@ -343,21 +337,21 @@ sealed class TopicImpl implements Topic {
         }
 
         @Override
-        public Builder token(String token) {
+        public Builder token(final String token) {
             checkNotNull(token, "token");
             this.token = token;
             return this;
         }
 
         @Override
-        public Builder username(String username) {
+        public Builder username(final String username) {
             checkNotNull(username, "username");
             this.username = username;
             return this;
         }
 
         @Override
-        public Builder password(String password) {
+        public Builder password(final String password) {
             checkNotNull(password, "password");
             this.password = password;
             return this;
@@ -365,22 +359,22 @@ sealed class TopicImpl implements Topic {
 
         @Override
         public Topic build() {
-            if (token == null && username == null && password == null) {
-                return new TopicImpl(host, name, client, timeout);
+            if (this.token == null && this.username == null && this.password == null) {
+                return new TopicImpl(this.host, this.name, this.client, this.timeout);
             }
-            if (token != null && (username != null || password != null)) {
+            if (this.token != null && (this.username != null || this.password != null)) {
                 throw new IllegalStateException("Topic cannot have both token and basic authentication");
             }
-            if (token != null) {
-                return new Protected(host, name, client, timeout, token);
+            if (this.token != null) {
+                return new Protected(this.host, this.name, this.client, this.timeout, this.token);
             }
-            if (username != null && password != null) {
-                return new Protected(host, name, client, timeout, username, password);
+            if (this.username != null && this.password != null) {
+                return new Protected(this.host, this.name, this.client, this.timeout, this.username, this.password);
             }
             throw new IllegalStateException(
-                (username != null ? "Username" : "Password")
+                (this.username != null ? "Username" : "Password")
                     + " provided without "
-                    + (username != null ? "password" : "username")
+                    + (this.username != null ? "password" : "username")
             );
         }
 

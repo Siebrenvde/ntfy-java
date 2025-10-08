@@ -6,29 +6,37 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+/**
+ * A result with either a value or an error
+ *
+ * @param <VALUE> the value type
+ * @param <ERROR> the error type
+ */
 public sealed interface Result<VALUE, ERROR> permits ResultImpl.Success, ResultImpl.Error {
 
     /**
      * Creates a new success result
+     *
      * @param value the value
-     * @return a success response
      * @param <V> the value type
      * @param <E> the error type
+     * @return a success response
      */
     @Contract(value = "_ -> new", pure = true)
-    static <V, E> Result<V, E> success(V value) {
+    static <V, E> Result<V, E> success(final V value) {
         return new ResultImpl.Success<>(value);
     }
 
     /**
      * Creates a new error response
+     *
      * @param error the error
-     * @return an error response
      * @param <V> the value type
      * @param <E> the error type
+     * @return an error response
      */
     @Contract(value = "_ -> new", pure = true)
-    static <V, E> Result<V, E> error(E error) {
+    static <V, E> Result<V, E> error(final E error) {
         return new ResultImpl.Error<>(error);
     }
 
@@ -43,7 +51,7 @@ public sealed interface Result<VALUE, ERROR> permits ResultImpl.Success, ResultI
      */
     @Contract(pure = true)
     default boolean isError() {
-        return !isSuccess();
+        return !this.isSuccess();
     }
 
     /**
@@ -60,24 +68,27 @@ public sealed interface Result<VALUE, ERROR> permits ResultImpl.Success, ResultI
 
     /**
      * Returns the value or throws the provided exception if the result is an error result
+     *
      * @param exceptionSupplier the exception to throw
-     * @return the value
      * @param <E> the exception type
+     * @return the value
      */
     @Contract(pure = true)
     <E extends Throwable> VALUE getOrThrow(Function<String, E> exceptionSupplier) throws E;
 
     /**
      * Returns the value or throws an {@link IllegalStateException} if the result is an error result
+     *
      * @return the value
      */
     @Contract(pure = true)
     default VALUE getOrThrow() {
-        return getOrThrow(IllegalStateException::new);
+        return this.getOrThrow(IllegalStateException::new);
     }
 
     /**
      * Executes the provided consumer if the result is a success result
+     *
      * @param valueConsumer the consumer to execute
      * @return the result for chaining
      */
@@ -86,6 +97,7 @@ public sealed interface Result<VALUE, ERROR> permits ResultImpl.Success, ResultI
 
     /**
      * Executes the provided consumer if the result is an error result
+     *
      * @param errorConsumer the consumer to execute
      * @return the result for chaining
      */

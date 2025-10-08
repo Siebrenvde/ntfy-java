@@ -14,7 +14,7 @@ final class HttpActionImpl extends AbstractAction implements HttpAction {
     private final Map<String, String> headers;
     private final @Nullable String body;
 
-    HttpActionImpl(String label, String url, Method method, Map<String, String> headers, @Nullable String body, boolean clear) {
+    HttpActionImpl(final String label, final String url, final Method method, final Map<String, String> headers, @Nullable final String body, final boolean clear) {
         super(label, clear);
         this.url = url;
         this.method = method;
@@ -29,31 +29,31 @@ final class HttpActionImpl extends AbstractAction implements HttpAction {
 
     @Override
     public String url() {
-        return url;
+        return this.url;
     }
 
     @Override
     public Method method() {
-        return method;
+        return this.method;
     }
 
     @Override
     public Map<String, String> headers() {
-        return headers;
+        return this.headers;
     }
 
     @Override
     public @Nullable String body() {
-        return body;
+        return this.body;
     }
 
     @Override
     public Builder toBuilder() {
-        return new BuilderImpl(label(), url)
-            .method(method)
-            .headers(headers)
-            .body(body)
-            .clear(clear());
+        return new BuilderImpl(this.label(), this.url)
+            .method(this.method)
+            .headers(this.headers)
+            .body(this.body)
+            .clear(this.clear());
     }
 
     static class BuilderImpl implements HttpAction.Builder {
@@ -65,23 +65,23 @@ final class HttpActionImpl extends AbstractAction implements HttpAction {
         private @Nullable String body;
         private boolean clear = false;
 
-        BuilderImpl(String label, String url) {
+        BuilderImpl(final String label, final String url) {
             checkNotNull(url, "url");
             this.label = label;
             this.url = url;
         }
 
         @Override
-        public Builder method(Method method) {
+        public Builder method(final Method method) {
             checkNotNull(method, "method");
             this.method = method;
             return this;
         }
 
         @Override
-        public Builder headers(Map<String, String> headers) {
+        public Builder headers(final Map<String, String> headers) {
             checkNotNull(headers, "headers");
-            for (Map.Entry<String, String> header : headers.entrySet()) {
+            for (final Map.Entry<String, String> header : headers.entrySet()) {
                 checkNotNull(header.getKey(), "key of header in headers");
                 checkNotNull(header.getValue(), "value of header in headers");
             }
@@ -90,7 +90,7 @@ final class HttpActionImpl extends AbstractAction implements HttpAction {
         }
 
         @Override
-        public Builder setHeader(String header, String value) {
+        public Builder setHeader(final String header, final String value) {
             checkNotNull(header, "header");
             checkNotNull(value, "value");
             this.headers.put(header, value);
@@ -98,20 +98,20 @@ final class HttpActionImpl extends AbstractAction implements HttpAction {
         }
 
         @Override
-        public Builder body(@Nullable String body) {
+        public Builder body(@Nullable final String body) {
             this.body = body;
             return this;
         }
 
         @Override
-        public Builder clear(boolean clear) {
+        public Builder clear(final boolean clear) {
             this.clear = clear;
             return this;
         }
 
         @Override
         public HttpAction build() {
-            return new HttpActionImpl(label, url, method, Map.copyOf(headers), body, clear);
+            return new HttpActionImpl(this.label, this.url, this.method, Map.copyOf(this.headers), this.body, this.clear);
         }
 
     }

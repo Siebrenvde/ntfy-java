@@ -10,7 +10,7 @@ final class BroadcastActionImpl extends AbstractAction implements BroadcastActio
     private final String intent;
     private final Map<String, String> extras;
 
-    BroadcastActionImpl(String label, String intent, Map<String, String> extras, boolean clear) {
+    BroadcastActionImpl(final String label, final String intent, final Map<String, String> extras, final boolean clear) {
         super(label, clear);
         this.intent = intent;
         this.extras = extras;
@@ -23,20 +23,20 @@ final class BroadcastActionImpl extends AbstractAction implements BroadcastActio
 
     @Override
     public String intent() {
-        return intent;
+        return this.intent;
     }
 
     @Override
     public Map<String, String> extras() {
-        return extras;
+        return this.extras;
     }
 
     @Override
     public Builder toBuilder() {
-        return new BuilderImpl(label())
-            .intent(intent)
-            .extras(extras)
-            .clear(clear());
+        return new BuilderImpl(this.label())
+            .intent(this.intent)
+            .extras(this.extras)
+            .clear(this.clear());
     }
 
     static class BuilderImpl implements BroadcastAction.Builder {
@@ -46,21 +46,21 @@ final class BroadcastActionImpl extends AbstractAction implements BroadcastActio
         private Map<String, String> extras = new HashMap<>();
         private boolean clear = false;
 
-        BuilderImpl(String label) {
+        BuilderImpl(final String label) {
             this.label = label;
         }
 
         @Override
-        public Builder intent(String intent) {
+        public Builder intent(final String intent) {
             checkNotNull(intent, "intent");
             this.intent = intent;
             return this;
         }
 
         @Override
-        public Builder extras(Map<String, String> extras) {
+        public Builder extras(final Map<String, String> extras) {
             checkNotNull(extras, "extras");
-            for (Map.Entry<String, String> extra : extras.entrySet()) {
+            for (final Map.Entry<String, String> extra : extras.entrySet()) {
                 checkNotNull(extra.getKey(), "key of extra in extras");
                 checkNotNull(extra.getValue(), "value of extra in extras");
             }
@@ -69,7 +69,7 @@ final class BroadcastActionImpl extends AbstractAction implements BroadcastActio
         }
 
         @Override
-        public Builder setExtra(String key, String value) {
+        public Builder setExtra(final String key, final String value) {
             checkNotNull(key, "key");
             checkNotNull(value, "value");
             this.extras.put(key, value);
@@ -77,14 +77,14 @@ final class BroadcastActionImpl extends AbstractAction implements BroadcastActio
         }
 
         @Override
-        public Builder clear(boolean clear) {
+        public Builder clear(final boolean clear) {
             this.clear = clear;
             return this;
         }
 
         @Override
         public BroadcastAction build() {
-            return new BroadcastActionImpl(label, intent, Map.copyOf(extras), clear);
+            return new BroadcastActionImpl(this.label, this.intent, Map.copyOf(this.extras), this.clear);
         }
 
     }

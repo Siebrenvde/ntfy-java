@@ -11,7 +11,7 @@ record PublishResponseImpl(
     @Nullable Instant expires
 ) implements PublishResponse {
 
-    static PublishResponseImpl fromJson(String json) {
+    static PublishResponseImpl fromJson(final String json) {
         return Util.GSON.fromJson(json, PublishResponseImpl.class);
     }
 

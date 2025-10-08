@@ -1,7 +1,11 @@
+[versions]
+indra = "3.2.0"
+
 [libraries]
 jspecify = "org.jspecify:jspecify:1.0.0"
 jetbrains-annotations = "org.jetbrains:annotations:26.0.2"
 gson = "com.google.code.gson:gson:2.13.1"
 
 [plugins]
-indra = { id = "net.kyori.indra", version = "3.2.0" }
+indra = { id = "net.kyori.indra", version.ref = "indra" }
+indra-checkstyle = { id = "net.kyori.indra.checkstyle", version.ref = "indra" }

@@ -7,6 +7,7 @@ import java.util.Map;
 
 /**
  * Represents an Android broadcast action
+ *
  * @see <a href="https://docs.ntfy.sh/publish/#send-android-broadcast">Send Android broadcast</a>
  */
 public sealed interface BroadcastAction extends Action permits BroadcastActionImpl {
@@ -27,6 +28,7 @@ public sealed interface BroadcastAction extends Action permits BroadcastActionIm
 
     /**
      * Creates a new builder from this action
+     *
      * @return a new builder
      */
     @Contract(value = "-> new", pure = true)
@@ -39,6 +41,7 @@ public sealed interface BroadcastAction extends Action permits BroadcastActionIm
 
         /**
          * Sets the intent
+         *
          * @param intent the intent
          * @return the builder
          */
@@ -47,6 +50,7 @@ public sealed interface BroadcastAction extends Action permits BroadcastActionIm
 
         /**
          * Sets all extras, overwriting any previously set extras
+         *
          * @param extras the extras
          * @return the builder
          */
@@ -55,6 +59,7 @@ public sealed interface BroadcastAction extends Action permits BroadcastActionIm
 
         /**
          * Sets an extra
+         *
          * @param key the key
          * @param value the value
          * @return the builder
@@ -64,6 +69,7 @@ public sealed interface BroadcastAction extends Action permits BroadcastActionIm
 
         /**
          * Sets whether to clear the notification after the button is tapped
+         *
          * @param clear whether to clear the notification after the button is tapped
          * @return the builder
          */
@@ -72,6 +78,7 @@ public sealed interface BroadcastAction extends Action permits BroadcastActionIm
 
         /**
          * Builds the action
+         *
          * @return a new action
          */
         @Contract(value = "-> new", pure = true)

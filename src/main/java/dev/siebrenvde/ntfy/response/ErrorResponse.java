@@ -29,7 +29,7 @@ public sealed interface ErrorResponse permits ErrorResponseImpl {
     @Nullable String link();
 
     @ApiStatus.Internal
-    static ErrorResponse fromJson(String json) {
+    static ErrorResponse fromJson(final String json) {
         return ErrorResponseImpl.fromJson(json);
     }
 

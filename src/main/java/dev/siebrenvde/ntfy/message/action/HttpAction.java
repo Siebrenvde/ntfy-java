@@ -8,6 +8,7 @@ import java.util.Map;
 
 /**
  * Represents an HTTP request action
+ *
  * @see <a href="https://docs.ntfy.sh/publish/#send-http-request">Send HTTP request</a>
  */
 public sealed interface HttpAction extends Action permits HttpActionImpl {
@@ -40,6 +41,7 @@ public sealed interface HttpAction extends Action permits HttpActionImpl {
 
     /**
      * Creates a new builder from this action
+     *
      * @return a new builder
      */
     @Contract(value = "-> new", pure = true)
@@ -67,6 +69,7 @@ public sealed interface HttpAction extends Action permits HttpActionImpl {
 
         /**
          * Sets the request method
+         *
          * @param method the method
          * @return the builder
          */
@@ -75,6 +78,7 @@ public sealed interface HttpAction extends Action permits HttpActionImpl {
 
         /**
          * Sets all headers, overwriting any previously set headers
+         *
          * @param headers the headers
          * @return the builder
          */
@@ -83,6 +87,7 @@ public sealed interface HttpAction extends Action permits HttpActionImpl {
 
         /**
          * Sets a header
+         *
          * @param header the header
          * @param value the value
          * @return the builder
@@ -92,6 +97,7 @@ public sealed interface HttpAction extends Action permits HttpActionImpl {
 
         /**
          * Sets the body
+         *
          * @param body the body
          * @return the builder
          */
@@ -100,6 +106,7 @@ public sealed interface HttpAction extends Action permits HttpActionImpl {
 
         /**
          * Sets whether to clear the notification after the button is tapped
+         *
          * @param clear whether to clear the notification after the button is tapped
          * @return the builder
          */
@@ -108,6 +115,7 @@ public sealed interface HttpAction extends Action permits HttpActionImpl {
 
         /**
          * Builds the action
+         *
          * @return a new action
          */
         @Contract(value = "-> new", pure = true)

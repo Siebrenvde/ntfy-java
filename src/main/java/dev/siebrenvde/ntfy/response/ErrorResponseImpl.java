@@ -10,7 +10,7 @@ record ErrorResponseImpl(
     @Nullable String link
 ) implements ErrorResponse {
 
-    static ErrorResponseImpl fromJson(String json) {
+    static ErrorResponseImpl fromJson(final String json) {
         return Util.GSON.fromJson(json, ErrorResponseImpl.class);
     }
 

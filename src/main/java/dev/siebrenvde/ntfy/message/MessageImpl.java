@@ -28,19 +28,19 @@ record MessageImpl(
     @Override
     public Builder toBuilder() {
         return new BuilderImpl()
-            .body(body)
-            .title(title)
-            .priority(priority)
-            .tags(tags)
-            .markdown(markdown)
-            .actions(actions)
-            .clickAction(clickAction)
-            .attachment(attachment)
-            .icon(icon)
-            .email(email)
-            .phone(phone)
-            .cache(cache)
-            .firebase(firebase);
+            .body(this.body)
+            .title(this.title)
+            .priority(this.priority)
+            .tags(this.tags)
+            .markdown(this.markdown)
+            .actions(this.actions)
+            .clickAction(this.clickAction)
+            .attachment(this.attachment)
+            .icon(this.icon)
+            .email(this.email)
+            .phone(this.phone)
+            .cache(this.cache)
+            .firebase(this.firebase);
     }
 
     static final class BuilderImpl implements Message.Builder {
@@ -60,114 +60,114 @@ record MessageImpl(
         private boolean firebase = true;
 
         @Override
-        public Builder body(@Nullable String body) {
+        public Builder body(@Nullable final String body) {
             this.body = body;
             return this;
         }
 
         @Override
-        public Builder title(@Nullable String title) {
+        public Builder title(@Nullable final String title) {
             this.title = title;
             return this;
         }
 
         @Override
-        public Builder priority(Priority priority) {
+        public Builder priority(final Priority priority) {
             checkNotNull(priority, "priority");
             this.priority = priority;
             return this;
         }
 
         @Override
-        public Builder tags(String... tags) {
+        public Builder tags(final String... tags) {
             checkNotNull(tags, "tags");
-            for (String tag : tags) checkNotNull(tag, "tag in tags");
+            for (final String tag : tags) checkNotNull(tag, "tag in tags");
             this.tags = new ArrayList<>(List.of(tags));
             return this;
         }
 
         @Override
-        public Builder tags(List<String> tags) {
+        public Builder tags(final List<String> tags) {
             checkNotNull(tags, "tags");
-            for (String tag : tags) checkNotNull(tag, "tag in tags");
+            for (final String tag : tags) checkNotNull(tag, "tag in tags");
             this.tags = new ArrayList<>(tags);
             return this;
         }
 
         @Override
-        public Builder addTag(String tag) {
+        public Builder addTag(final String tag) {
             checkNotNull(tag, "tag");
             this.tags.add(tag);
             return this;
         }
 
         @Override
-        public Builder markdown(boolean markdown) {
+        public Builder markdown(final boolean markdown) {
             this.markdown = true;
             return this;
         }
 
         @Override
-        public Builder actions(Action... actions) {
+        public Builder actions(final Action... actions) {
             checkNotNull(actions, "actions");
-            for (Action action : actions) checkNotNull(action, "action in actions");
+            for (final Action action : actions) checkNotNull(action, "action in actions");
             this.actions = new ArrayList<>(List.of(actions));
             return this;
         }
 
         @Override
-        public Builder actions(List<Action> actions) {
+        public Builder actions(final List<Action> actions) {
             checkNotNull(actions, "actions");
-            for (Action action : actions) checkNotNull(action, "action in actions");
+            for (final Action action : actions) checkNotNull(action, "action in actions");
             this.actions = new ArrayList<>(actions);
             return this;
         }
 
         @Override
-        public Builder addAction(Action action) {
+        public Builder addAction(final Action action) {
             checkNotNull(action, "action");
             this.actions.add(action);
             return this;
         }
 
         @Override
-        public Builder clickAction(@Nullable String url) {
+        public Builder clickAction(@Nullable final String url) {
             this.clickAction = url;
             return this;
         }
 
         @Override
-        public Builder attachment(@Nullable Attachment attachment) {
+        public Builder attachment(@Nullable final Attachment attachment) {
             this.attachment = attachment;
             return this;
         }
 
         @Override
-        public Builder icon(@Nullable String url) {
+        public Builder icon(@Nullable final String url) {
             this.icon = url;
             return this;
         }
 
         @Override
-        public Builder email(@Nullable String email) {
+        public Builder email(@Nullable final String email) {
             this.email = email;
             return this;
         }
 
         @Override
-        public Builder phone(@Nullable String phone) {
+        public Builder phone(@Nullable final String phone) {
             this.phone = phone;
             return this;
         }
 
         @Override
-        public Builder cache(boolean cache) {
+        public Builder cache(final boolean cache) {
             this.cache = cache;
             return this;
         }
 
         @Override
-        public Builder firebase(boolean firebase) {
+        public Builder firebase(final boolean firebase) {
             this.firebase = firebase;
             return this;
         }
@@ -175,19 +175,19 @@ record MessageImpl(
         @Override
         public Message build() {
             return new MessageImpl(
-                body,
-                title,
-                priority,
-                List.copyOf(tags),
-                markdown,
-                List.copyOf(actions),
-                clickAction,
-                attachment,
-                icon,
-                email,
-                phone,
-                cache,
-                firebase
+                this.body,
+                this.title,
+                this.priority,
+                List.copyOf(this.tags),
+                this.markdown,
+                List.copyOf(this.actions),
+                this.clickAction,
+                this.attachment,
+                this.icon,
+                this.email,
+                this.phone,
+                this.cache,
+                this.firebase
             );
         }
 

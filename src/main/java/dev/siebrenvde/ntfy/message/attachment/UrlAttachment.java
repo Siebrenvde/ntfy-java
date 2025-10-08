@@ -4,6 +4,7 @@ import org.jetbrains.annotations.Contract;
 
 /**
  * Represents a URL attachment
+ *
  * @see <a href="https://docs.ntfy.sh/publish/#attach-file-from-a-url">Attach file from a URL</a>
  */
 public sealed interface UrlAttachment extends Attachment permits UrlAttachmentImpl {

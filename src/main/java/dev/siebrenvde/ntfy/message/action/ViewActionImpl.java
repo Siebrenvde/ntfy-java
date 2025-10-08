@@ -6,13 +6,13 @@ final class ViewActionImpl extends AbstractAction implements ViewAction {
 
     private final String url;
 
-    ViewActionImpl(String label, String url, boolean clear) {
+    ViewActionImpl(final String label, final String url, final boolean clear) {
         super(label, clear);
         checkNotNull(url, "url");
         this.url = url;
     }
 
-    ViewActionImpl(String label, String url) {
+    ViewActionImpl(final String label, final String url) {
         super(label);
         this.url = url;
     }
@@ -24,7 +24,7 @@ final class ViewActionImpl extends AbstractAction implements ViewAction {
 
     @Override
     public String url() {
-        return url;
+        return this.url;
     }
 
 }

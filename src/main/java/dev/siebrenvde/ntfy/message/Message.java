@@ -15,6 +15,7 @@ public sealed interface Message permits MessageImpl {
 
     /**
      * Creates a new message builder
+     *
      * @return a message builder
      */
     @Contract(value = "-> new", pure = true)
@@ -24,22 +25,24 @@ public sealed interface Message permits MessageImpl {
 
     /**
      * Creates a new message with only a body
+     *
      * @param body the body
      * @return a message
      */
     @Contract(value = "_ -> new", pure = true)
-    static Message message(String body) {
+    static Message message(final String body) {
         return message().body(body).build();
     }
 
     /**
      * Creates a new message with a body and title
+     *
      * @param body the body
      * @param title the title
      * @return a message
      */
     @Contract(value = "_, _ -> new", pure = true)
-    static Message message(String body, String title) {
+    static Message message(final String body, final String title) {
         return message().body(body).title(title).build();
     }
 
@@ -57,6 +60,7 @@ public sealed interface Message permits MessageImpl {
 
     /**
      * {@return the priority}
+     *
      * @see <a href="https://docs.ntfy.sh/publish/#message-priority">Message priority</a>
      */
     @Contract(pure = true)
@@ -64,6 +68,7 @@ public sealed interface Message permits MessageImpl {
 
     /**
      * {@return a list of tags}
+     *
      * @see <a href="https://docs.ntfy.sh/publish/#tags-emojis">Tags &amp; emojis</a>
      */
     @Contract(pure = true)
@@ -71,6 +76,7 @@ public sealed interface Message permits MessageImpl {
 
     /**
      * {@return whether the body should be interpreted as Markdown}
+     *
      * @see <a href="https://docs.ntfy.sh/publish/#markdown-formatting">Markdown formatting</a>
      */
     @Contract(pure = true)
@@ -78,6 +84,7 @@ public sealed interface Message permits MessageImpl {
 
     /**
      * {@return a list of actions}
+     *
      * @see <a href="https://docs.ntfy.sh/publish/#action-buttons">Action buttons</a>
      */
     @Contract(pure = true)
@@ -85,6 +92,7 @@ public sealed interface Message permits MessageImpl {
 
     /**
      * {@return the click action}
+     *
      * @see <a href="https://docs.ntfy.sh/publish/#click-action">Click action</a>
      */
     @Contract(pure = true)
@@ -92,6 +100,7 @@ public sealed interface Message permits MessageImpl {
 
     /**
      * {@return the attachment}
+     *
      * @see <a href="https://docs.ntfy.sh/publish/#attachments">Attachments</a>
      */
     @Contract(pure = true)
@@ -99,6 +108,7 @@ public sealed interface Message permits MessageImpl {
 
     /**
      * {@return the icon}
+     *
      * @see <a href="https://docs.ntfy.sh/publish/#icons">Icons</a>
      */
     @Contract(pure = true)
@@ -106,6 +116,7 @@ public sealed interface Message permits MessageImpl {
 
     /**
      * {@return the email address this message will be forwarded to}
+     *
      * @see <a href="https://docs.ntfy.sh/publish/#e-mail-notifications">E-mail notifications</a>
      */
     @Contract(pure = true)
@@ -113,6 +124,7 @@ public sealed interface Message permits MessageImpl {
 
     /**
      * {@return the phone number to call, or 'yes' to use the first verified phone number}
+     *
      * @see <a href="https://docs.ntfy.sh/publish/#phone-calls">Phone calls</a>
      */
     @Contract(pure = true)
@@ -120,6 +132,7 @@ public sealed interface Message permits MessageImpl {
 
     /**
      * {@return whether to cache this message on the server}
+     *
      * @see <a href="https://docs.ntfy.sh/publish/#message-caching">Message caching</a>
      */
     @Contract(pure = true)
@@ -127,6 +140,7 @@ public sealed interface Message permits MessageImpl {
 
     /**
      * {@return whether to forward this message to Firebase}
+     *
      * @see <a href="https://docs.ntfy.sh/publish/#disable-firebase">Disable Firebase</a>
      */
     @Contract(pure = true)
@@ -134,6 +148,7 @@ public sealed interface Message permits MessageImpl {
 
     /**
      * Creates a new builder from this message
+     *
      * @return a new builder
      */
     @Contract(value = "-> new", pure = true)
@@ -146,6 +161,7 @@ public sealed interface Message permits MessageImpl {
 
         /**
          * Sets the message body
+         *
          * @param body the body
          * @return the builder
          */
@@ -154,6 +170,7 @@ public sealed interface Message permits MessageImpl {
 
         /**
          * Sets the message title
+         *
          * @param title the title
          * @return the builder
          */
@@ -162,6 +179,7 @@ public sealed interface Message permits MessageImpl {
 
         /**
          * Sets the priority
+         *
          * @param priority the priority
          * @return the builder
          * @see <a href="https://docs.ntfy.sh/publish/#message-priority">Message priority</a>
@@ -171,6 +189,7 @@ public sealed interface Message permits MessageImpl {
 
         /**
          * Sets all tags, overwriting any previously set tags
+         *
          * @param tags the tags
          * @return the builder
          * @see <a href="https://docs.ntfy.sh/publish/#tags-emojis">Tags &amp; emojis</a>
@@ -180,6 +199,7 @@ public sealed interface Message permits MessageImpl {
 
         /**
          * Sets all tags, overwriting any previously set tags
+         *
          * @param tags the tags
          * @return the builder
          * @see <a href="https://docs.ntfy.sh/publish/#tags-emojis">Tags &amp; emojis</a>
@@ -189,6 +209,7 @@ public sealed interface Message permits MessageImpl {
 
         /**
          * Adds a tag
+         *
          * @param tag the tag
          * @return the builder
          * @see <a href="https://docs.ntfy.sh/publish/#tags-emojis">Tags &amp; emojis</a>
@@ -198,6 +219,7 @@ public sealed interface Message permits MessageImpl {
 
         /**
          * Sets whether the body should be interpreted as Markdown
+         *
          * @param markdown <code>true</code> if the body should be interpreted as Markdown
          * @return the builder
          * @see <a href="https://docs.ntfy.sh/publish/#markdown-formatting">Markdown formatting</a>
@@ -207,6 +229,7 @@ public sealed interface Message permits MessageImpl {
 
         /**
          * Sets all actions, overwriting any previously set actions
+         *
          * @param actions the actions
          * @return the builder
          * @see <a href="https://docs.ntfy.sh/publish/#action-buttons">Action buttons</a>
@@ -216,6 +239,7 @@ public sealed interface Message permits MessageImpl {
 
         /**
          * Sets all actions, overwriting any previously set actions
+         *
          * @param actions the actions
          * @return the builder
          * @see <a href="https://docs.ntfy.sh/publish/#action-buttons">Action buttons</a>
@@ -225,6 +249,7 @@ public sealed interface Message permits MessageImpl {
 
         /**
          * Adds an action
+         *
          * @param action the action
          * @return the builder
          * @see <a href="https://docs.ntfy.sh/publish/#action-buttons">Action buttons</a>
@@ -234,6 +259,7 @@ public sealed interface Message permits MessageImpl {
 
         /**
          * Sets the click action
+         *
          * @param url the url
          * @return the builder
          * @see <a href="https://docs.ntfy.sh/publish/#click-action">Click action</a>
@@ -243,6 +269,7 @@ public sealed interface Message permits MessageImpl {
 
         /**
          * Sets the attachment
+         *
          * @param attachment the attachment
          * @return the builder
          * @see <a href="https://docs.ntfy.sh/publish/#attachments">Attachments</a>
@@ -252,6 +279,7 @@ public sealed interface Message permits MessageImpl {
 
         /**
          * Sets the icon
+         *
          * @param url the url
          * @return the builder
          * @see <a href="https://docs.ntfy.sh/publish/#icons">Icons</a>
@@ -261,6 +289,7 @@ public sealed interface Message permits MessageImpl {
 
         /**
          * Sets the email address to forward the message to
+         *
          * @param email the email address
          * @return the builder
          * @see <a href="https://docs.ntfy.sh/publish/#e-mail-notifications">E-mail notifications</a>
@@ -270,10 +299,11 @@ public sealed interface Message permits MessageImpl {
 
         /**
          * Sets the phone number to call
-         * <br>
-         * Should be prefixed with a plus sign and the country code
-         * <br>
-         * Set to 'yes' to use the first verified phone number
+         *
+         * <p>Should be prefixed with a plus sign and the country code</p>
+         *
+         * <p>Set to 'yes' to use the first verified phone number</p>
+         *
          * @param phone the phone number
          * @return the builder
          * @see <a href="https://docs.ntfy.sh/publish/#phone-calls">Phone calls</a>
@@ -283,6 +313,7 @@ public sealed interface Message permits MessageImpl {
 
         /**
          * Sets whether to cache the message on the server
+         *
          * @param cache <code>false</code> to disable caching
          * @return the builder
          * @see <a href="https://docs.ntfy.sh/publish/#message-caching">Message caching</a>
@@ -292,6 +323,7 @@ public sealed interface Message permits MessageImpl {
 
         /**
          * Sets whether to forward the message to Firebase
+         *
          * @param firebase <code>false</code> to disable Firebase forwarding
          * @return the builder
          * @see <a href="https://docs.ntfy.sh/publish/#disable-firebase">Disable Firebase</a>
@@ -301,6 +333,7 @@ public sealed interface Message permits MessageImpl {
 
         /**
          * Builds the message
+         *
          * @return a new message
          */
         @Contract(value = "-> new", pure = true)

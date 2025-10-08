@@ -10,12 +10,12 @@ import java.time.Instant;
 class InstantAdapter extends TypeAdapter<Instant> {
 
     @Override
-    public void write(JsonWriter out, Instant value) throws IOException {
+    public void write(final JsonWriter out, final Instant value) throws IOException {
         out.value(value.getEpochSecond());
     }
 
     @Override
-    public Instant read(JsonReader in) throws IOException {
+    public Instant read(final JsonReader in) throws IOException {
         return Instant.ofEpochSecond(in.nextLong());
     }
 

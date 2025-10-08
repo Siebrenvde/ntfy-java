@@ -26,7 +26,7 @@ public sealed interface PublishResponse permits PublishResponseImpl {
     @Nullable Instant expires();
 
     @ApiStatus.Internal
-    static PublishResponse fromJson(String json) {
+    static PublishResponse fromJson(final String json) {
         return PublishResponseImpl.fromJson(json);
     }
 
