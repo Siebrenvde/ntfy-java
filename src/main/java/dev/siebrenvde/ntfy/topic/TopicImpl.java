@@ -1,5 +1,6 @@
 package dev.siebrenvde.ntfy.topic;
 
+import dev.siebrenvde.ntfy.internal.BuildParameters;
 import dev.siebrenvde.ntfy.message.Message;
 import dev.siebrenvde.ntfy.message.Priority;
 import dev.siebrenvde.ntfy.message.action.Action;
@@ -41,6 +42,7 @@ import static dev.siebrenvde.ntfy.internal.Util.checkNotNull;
 sealed class TopicImpl implements Topic permits TopicImpl.Protected {
 
     private static final HttpClient DEFAULT_CLIENT = HttpClient.newHttpClient();
+    private static final String USER_AGENT = "ntfy-java/" + BuildParameters.VERSION + " (https://github.com/Siebrenvde/ntfy-java)";
 
     private final String host;
     private final String name;
@@ -139,6 +141,8 @@ sealed class TopicImpl implements Topic permits TopicImpl.Protected {
     @SuppressWarnings("UastIncorrectHttpHeaderInspection")
     private HttpRequest createRequest(final Message message, @Nullable final Instant time) throws FileNotFoundException {
         final HttpRequest.Builder builder = HttpRequest.newBuilder(this.uri);
+
+        builder.header("User-Agent", USER_AGENT);
 
         if (message.body() != null) {
             builder.header("Message", this.encodeBase64(message.body()));

@@ -1,0 +1,19 @@
+package dev.siebrenvde.ntfy.internal;
+
+// {# @pebvariable name="version" type="java.lang.String" #}
+
+/**
+* Compile-time values
+*/
+public final class BuildParameters {
+
+    /**
+    * The version of the library
+    */
+    public static final String VERSION = "{{ version }}";
+
+    private BuildParameters() {
+
+    }
+
+}

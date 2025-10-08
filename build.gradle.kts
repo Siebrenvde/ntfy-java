@@ -3,6 +3,7 @@ plugins {
     id("maven-publish")
     alias(libs.plugins.indra)
     alias(libs.plugins.indra.checkstyle)
+    alias(libs.plugins.blossom)
 }
 
 repositories {
@@ -67,4 +68,10 @@ tasks.javadoc.configure {
         "https://jspecify.dev/docs/api/",
         "https://javadoc.io/doc/org.jetbrains/annotations/${libs.jetbrains.annotations.get().version}/"
     )
+}
+
+sourceSets.main {
+    blossom.javaSources {
+        property("version", project.version.toString())
+    }
 }
