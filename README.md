@@ -14,7 +14,7 @@ repositories {
 }
 
 dependencies {
-    implementation("dev.siebrenvde:ntfy-java:0.2.0")
+    implementation("dev.siebrenvde:ntfy-java:0.3.0")
 }
 ```
 
@@ -31,7 +31,7 @@ dependencies {
   <dependency>
     <groupId>dev.siebrenvde</groupId>
     <artifactId>ntfy-java</artifactId>
-    <version>0.2.0</version>
+    <version>0.3.0</version>
   </dependency>
 </dependencies>
 ```
