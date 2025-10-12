@@ -103,7 +103,7 @@ record MessageImpl(
 
         @Override
         public Builder markdown(final boolean markdown) {
-            this.markdown = true;
+            this.markdown = markdown;
             return this;
         }
 
