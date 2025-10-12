@@ -9,4 +9,4 @@ gson = "com.google.code.gson:gson:2.13.1"
 [plugins]
 indra = { id = "net.kyori.indra", version.ref = "indra" }
 indra-checkstyle = { id = "net.kyori.indra.checkstyle", version.ref = "indra" }
-blossom = { id = "net.kyori.blossom", version = "2.1.0" }
+blossom = { id = "net.kyori.blossom", version = "2.2.0" }
