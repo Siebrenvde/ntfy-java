@@ -1,5 +1,5 @@
 [versions]
-indra = "3.2.0"
+indra = "4.0.0"
 
 [libraries]
 jspecify = "org.jspecify:jspecify:1.0.0"
