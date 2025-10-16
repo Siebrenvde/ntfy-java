@@ -20,7 +20,7 @@ indra {
     javaVersions {
         target(17)
     }
-    checkstyle("11.1.0")
+    checkstyle(libs.versions.checkstyle.get())
 }
 
 publishing {
