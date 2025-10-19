@@ -1,6 +1,6 @@
 [versions]
 indra = "4.0.0"
-checkstyle = "12.0.1"
+checkstyle = "12.1.0"
 
 [libraries]
 jspecify = "org.jspecify:jspecify:1.0.0"
