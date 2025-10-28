@@ -1,9 +1,13 @@
+import net.ltgt.gradle.errorprone.CheckSeverity
+import net.ltgt.gradle.errorprone.errorprone
+
 plugins {
     id("java-library")
     id("maven-publish")
     alias(libs.plugins.indra)
     alias(libs.plugins.indra.checkstyle)
     alias(libs.plugins.blossom)
+    alias(libs.plugins.errorprone)
 }
 
 repositories {
@@ -14,11 +18,15 @@ dependencies {
     compileOnlyApi(libs.jspecify)
     compileOnlyApi(libs.jetbrains.annotations)
     implementation(libs.gson)
+
+    errorprone(libs.errorprone)
+    errorprone(libs.nullaway)
 }
 
 indra {
     javaVersions {
         target(17)
+        minimumToolchain(21)
     }
     checkstyle(libs.versions.checkstyle.get())
 }
@@ -73,5 +81,13 @@ tasks.javadoc.configure {
 sourceSets.main {
     blossom.javaSources {
         property("version", project.version.toString())
+    }
+}
+
+tasks.compileJava {
+    options.errorprone {
+        check("NullAway", CheckSeverity.ERROR)
+        option("NullAway:AnnotatedPackages", "dev.siebrenvde.ntfy")
+        option("NullAway:JSpecifyMode", "true")
     }
 }

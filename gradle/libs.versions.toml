@@ -7,6 +7,10 @@ jspecify = "org.jspecify:jspecify:1.0.0"
 jetbrains-annotations = "org.jetbrains:annotations:26.0.2-1"
 gson = "com.google.code.gson:gson:2.13.2"
 
+# ErrorProne
+errorprone = "com.google.errorprone:error_prone_core:2.43.0"
+nullaway = "com.uber.nullaway:nullaway:0.12.10"
+
 # unused, for renovate
 #noinspection UnusedVersionCatalogEntry
 checkstyle = { module = "com.puppycrawl.tools:checkstyle", version.ref = "checkstyle" }
@@ -15,3 +19,4 @@ checkstyle = { module = "com.puppycrawl.tools:checkstyle", version.ref = "checks
 indra = { id = "net.kyori.indra", version.ref = "indra" }
 indra-checkstyle = { id = "net.kyori.indra.checkstyle", version.ref = "indra" }
 blossom = { id = "net.kyori.blossom", version = "2.2.0" }
+errorprone = { id = "net.ltgt.errorprone", version = "4.3.0" }

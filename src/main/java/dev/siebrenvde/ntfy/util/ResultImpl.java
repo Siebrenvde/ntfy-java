@@ -47,6 +47,7 @@ class ResultImpl {
 
     }
 
+    @SuppressWarnings("JavaLangClash")
     record Error<VALUE, ERROR>(ERROR _error) implements Result<VALUE, ERROR> {
 
         Error {
