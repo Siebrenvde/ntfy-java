@@ -26,7 +26,7 @@ dependencies {
 indra {
     javaVersions {
         target(17)
-        minimumToolchain(21)
+        minimumToolchain(22)
     }
     checkstyle(libs.versions.checkstyle.get())
 }
