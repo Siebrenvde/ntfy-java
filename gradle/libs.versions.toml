@@ -9,7 +9,7 @@ gson = "com.google.code.gson:gson:2.13.2"
 
 # ErrorProne
 errorprone = "com.google.errorprone:error_prone_core:2.43.0"
-nullaway = "com.uber.nullaway:nullaway:0.12.10"
+nullaway = "com.uber.nullaway:nullaway:0.12.11"
 
 # unused, for renovate
 #noinspection UnusedVersionCatalogEntry
