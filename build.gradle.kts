@@ -21,12 +21,16 @@ dependencies {
 
     errorprone(libs.errorprone)
     errorprone(libs.nullaway)
+
+    testImplementation(libs.junit.jupiter)
+    testRuntimeOnly(libs.junit.platform)
 }
 
 indra {
     javaVersions {
         target(17)
         minimumToolchain(22)
+        testWith(17, 21, 25)
     }
     checkstyle(libs.versions.checkstyle.get())
 }
@@ -84,7 +88,7 @@ sourceSets.main {
     }
 }
 
-tasks.compileJava {
+tasks.withType<JavaCompile> {
     options.errorprone {
         check("NullAway", CheckSeverity.ERROR)
         option("NullAway:AnnotatedPackages", "dev.siebrenvde.ntfy")

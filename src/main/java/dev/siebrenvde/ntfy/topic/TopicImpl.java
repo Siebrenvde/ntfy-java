@@ -13,6 +13,7 @@ import dev.siebrenvde.ntfy.message.attachment.UrlAttachment;
 import dev.siebrenvde.ntfy.response.ErrorResponse;
 import dev.siebrenvde.ntfy.response.PublishResponse;
 import dev.siebrenvde.ntfy.util.Result;
+import org.jetbrains.annotations.VisibleForTesting;
 import org.jspecify.annotations.Nullable;
 
 import java.io.FileNotFoundException;
@@ -42,7 +43,7 @@ import static dev.siebrenvde.ntfy.internal.Util.checkNotNull;
 
 sealed class TopicImpl implements Topic permits TopicImpl.Protected {
 
-    private static final HttpClient DEFAULT_CLIENT = HttpClient.newHttpClient();
+    @VisibleForTesting static final HttpClient DEFAULT_CLIENT = HttpClient.newHttpClient();
     private static final String USER_AGENT = "ntfy-java/" + BuildParameters.VERSION + " (https://github.com/Siebrenvde/ntfy-java)";
 
     private final String host;
@@ -299,7 +300,7 @@ sealed class TopicImpl implements Topic permits TopicImpl.Protected {
 
     static final class Protected extends TopicImpl {
 
-        private final String header;
+        @VisibleForTesting final String header;
 
         Protected(final String host, final String name, final HttpClient client, @Nullable final Duration timeout, final String username, final String password) {
             super(host, name, client, timeout);

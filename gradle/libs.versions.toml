@@ -1,6 +1,7 @@
 [versions]
 indra = "4.0.0"
 checkstyle = "12.1.1"
+junit = "6.0.0"
 
 [libraries]
 jspecify = "org.jspecify:jspecify:1.0.0"
@@ -10,6 +11,10 @@ gson = "com.google.code.gson:gson:2.13.2"
 # ErrorProne
 errorprone = "com.google.errorprone:error_prone_core:2.43.0"
 nullaway = "com.uber.nullaway:nullaway:0.12.11"
+
+# Testing
+junit-jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junit" }
+junit-platform = { module = "org.junit.platform:junit-platform-launcher", version.ref = "junit" }
 
 # unused, for renovate
 #noinspection UnusedVersionCatalogEntry
