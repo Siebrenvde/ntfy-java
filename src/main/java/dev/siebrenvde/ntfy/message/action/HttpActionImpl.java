@@ -4,6 +4,7 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import static dev.siebrenvde.ntfy.internal.Util.checkNotNull;
 
@@ -54,6 +55,19 @@ final class HttpActionImpl extends AbstractAction implements HttpAction {
             .headers(this.headers)
             .body(this.body)
             .clear(this.clear());
+    }
+
+    @Override
+    public boolean equals(@Nullable final Object o) {
+        if (o == null || this.getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        final HttpActionImpl that = (HttpActionImpl) o;
+        return Objects.equals(this.url, that.url) && this.method == that.method && Objects.equals(this.headers, that.headers) && Objects.equals(this.body, that.body);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), this.url, this.method, this.headers, this.body);
     }
 
     static class BuilderImpl implements HttpAction.Builder {

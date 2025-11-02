@@ -34,6 +34,7 @@ import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
 import static dev.siebrenvde.ntfy.internal.Util.checkArgument;
@@ -285,6 +286,18 @@ sealed class TopicImpl implements Topic permits TopicImpl.Protected {
         return input;
     }
 
+    @Override
+    public boolean equals(@Nullable final Object o) {
+        if (o == null || this.getClass() != o.getClass()) return false;
+        final TopicImpl topic = (TopicImpl) o;
+        return Objects.equals(this.host, topic.host) && Objects.equals(this.name, topic.name) && Objects.equals(this.uri, topic.uri) && Objects.equals(this.client, topic.client) && Objects.equals(this.timeout, topic.timeout);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.host, this.name, this.uri, this.client, this.timeout);
+    }
+
     static final class Protected extends TopicImpl {
 
         private final String header;
@@ -297,6 +310,19 @@ sealed class TopicImpl implements Topic permits TopicImpl.Protected {
         Protected(final String host, final String name, final HttpClient client, @Nullable final Duration timeout, final String token) {
             super(host, name, client, timeout);
             this.header = "Bearer " + token;
+        }
+
+        @Override
+        public boolean equals(@Nullable final Object o) {
+            if (o == null || this.getClass() != o.getClass()) return false;
+            if (!super.equals(o)) return false;
+            final Protected that = (Protected) o;
+            return Objects.equals(this.header, that.header);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(super.hashCode(), this.header);
         }
 
     }

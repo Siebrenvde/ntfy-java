@@ -1,5 +1,9 @@
 package dev.siebrenvde.ntfy.message.action;
 
+import org.jspecify.annotations.Nullable;
+
+import java.util.Objects;
+
 import static dev.siebrenvde.ntfy.internal.Util.checkNotNull;
 
 abstract sealed class AbstractAction implements Action permits BroadcastActionImpl, HttpActionImpl, ViewActionImpl {
@@ -25,6 +29,18 @@ abstract sealed class AbstractAction implements Action permits BroadcastActionIm
     @Override
     public boolean clear() {
         return this.clear;
+    }
+
+    @Override
+    public boolean equals(@Nullable final Object o) {
+        if (o == null || this.getClass() != o.getClass()) return false;
+        final AbstractAction that = (AbstractAction) o;
+        return this.clear == that.clear && Objects.equals(this.label, that.label);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.label, this.clear);
     }
 
 }

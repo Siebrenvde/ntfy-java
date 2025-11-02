@@ -1,7 +1,10 @@
 package dev.siebrenvde.ntfy.message.action;
 
+import org.jspecify.annotations.Nullable;
+
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import static dev.siebrenvde.ntfy.internal.Util.checkNotNull;
 
@@ -37,6 +40,19 @@ final class BroadcastActionImpl extends AbstractAction implements BroadcastActio
             .intent(this.intent)
             .extras(this.extras)
             .clear(this.clear());
+    }
+
+    @Override
+    public boolean equals(@Nullable final Object o) {
+        if (o == null || this.getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        final BroadcastActionImpl that = (BroadcastActionImpl) o;
+        return Objects.equals(this.intent, that.intent) && Objects.equals(this.extras, that.extras);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), this.intent, this.extras);
     }
 
     static class BuilderImpl implements BroadcastAction.Builder {
