@@ -1,7 +1,5 @@
 package dev.siebrenvde.ntfy.message.action;
 
-import org.jspecify.annotations.Nullable;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -43,10 +41,9 @@ final class BroadcastActionImpl extends AbstractAction implements BroadcastActio
     }
 
     @Override
-    public boolean equals(@Nullable final Object o) {
-        if (o == null || this.getClass() != o.getClass()) return false;
+    public boolean equals(final Object o) {
+        if (!(o instanceof final BroadcastActionImpl that)) return false;
         if (!super.equals(o)) return false;
-        final BroadcastActionImpl that = (BroadcastActionImpl) o;
         return Objects.equals(this.intent, that.intent) && Objects.equals(this.extras, that.extras);
     }
 

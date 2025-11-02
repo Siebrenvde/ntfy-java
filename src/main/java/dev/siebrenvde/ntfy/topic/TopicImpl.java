@@ -287,9 +287,8 @@ sealed class TopicImpl implements Topic permits TopicImpl.Protected {
     }
 
     @Override
-    public boolean equals(@Nullable final Object o) {
-        if (o == null || this.getClass() != o.getClass()) return false;
-        final TopicImpl topic = (TopicImpl) o;
+    public boolean equals(final Object o) {
+        if (!(o instanceof final TopicImpl topic)) return false;
         return Objects.equals(this.host, topic.host) && Objects.equals(this.name, topic.name) && Objects.equals(this.uri, topic.uri) && Objects.equals(this.client, topic.client) && Objects.equals(this.timeout, topic.timeout);
     }
 
@@ -313,10 +312,9 @@ sealed class TopicImpl implements Topic permits TopicImpl.Protected {
         }
 
         @Override
-        public boolean equals(@Nullable final Object o) {
-            if (o == null || this.getClass() != o.getClass()) return false;
+        public boolean equals(final Object o) {
+            if (!(o instanceof final Protected that)) return false;
             if (!super.equals(o)) return false;
-            final Protected that = (Protected) o;
             return Objects.equals(this.header, that.header);
         }
 

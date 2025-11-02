@@ -58,10 +58,9 @@ final class HttpActionImpl extends AbstractAction implements HttpAction {
     }
 
     @Override
-    public boolean equals(@Nullable final Object o) {
-        if (o == null || this.getClass() != o.getClass()) return false;
+    public boolean equals(final Object o) {
+        if (!(o instanceof final HttpActionImpl that)) return false;
         if (!super.equals(o)) return false;
-        final HttpActionImpl that = (HttpActionImpl) o;
         return Objects.equals(this.url, that.url) && this.method == that.method && Objects.equals(this.headers, that.headers) && Objects.equals(this.body, that.body);
     }
 

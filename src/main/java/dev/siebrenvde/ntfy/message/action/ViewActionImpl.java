@@ -1,7 +1,5 @@
 package dev.siebrenvde.ntfy.message.action;
 
-import org.jspecify.annotations.Nullable;
-
 import java.util.Objects;
 
 import static dev.siebrenvde.ntfy.internal.Util.checkNotNull;
@@ -32,10 +30,9 @@ final class ViewActionImpl extends AbstractAction implements ViewAction {
     }
 
     @Override
-    public boolean equals(@Nullable final Object o) {
-        if (o == null || this.getClass() != o.getClass()) return false;
+    public boolean equals(final Object o) {
+        if (!(o instanceof final ViewActionImpl that)) return false;
         if (!super.equals(o)) return false;
-        final ViewActionImpl that = (ViewActionImpl) o;
         return Objects.equals(this.url, that.url);
     }
 
