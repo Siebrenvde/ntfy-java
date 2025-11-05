@@ -6,7 +6,6 @@ plugins {
     id("maven-publish")
     alias(libs.plugins.indra)
     alias(libs.plugins.indra.checkstyle)
-    alias(libs.plugins.indra.publishing)
     alias(libs.plugins.blossom)
     alias(libs.plugins.errorprone)
 }
@@ -34,30 +33,46 @@ indra {
         testWith(17, 21, 25)
     }
     checkstyle(libs.versions.checkstyle.get())
+}
 
-    mitLicense()
-    github("Siebrenvde", "ntfy-java")
-
-    publishReleasesTo("siebrenvde-releases", "https://repo.siebrenvde.dev/releases/")
-    publishSnapshotsTo("siebrenvde-snapshots", "https://repo.siebrenvde.dev/snapshots/")
-
-    configurePublications {
-        pom {
-            developers {
-                developer {
-                    id = "siebrenvde"
-                    name = "Siebrenvde"
-                    email = "siebren@siebrenvde.dev"
-                    url = "https://siebrenvde.dev"
-                    timezone = "Europe/Brussels"
+publishing {
+    publications {
+        create<MavenPublication>("maven") {
+            from(components["java"])
+            pom {
+                name = project.name
+                url = "https://github.com/Siebrenvde/ntfy-java"
+                licenses {
+                    license {
+                        name = "The MIT License"
+                        url = "https://opensource.org/licenses/MIT"
+                    }
+                }
+                developers {
+                    developer {
+                        id = "siebrenvde"
+                        name = "Siebrenvde"
+                        email = "siebren@siebrenvde.dev"
+                        url = "https://siebrenvde.dev"
+                        timezone = "Europe/Brussels"
+                    }
+                }
+                scm {
+                    connection = "scm:git:https://github.com/Siebrenvde/ntfy-java.git"
+                    developerConnection = "scm:git:ssh://git@github.com/Siebrenvde/ntfy-java.git"
+                    url = "https://github.com/Siebrenvde/ntfy-java"
                 }
             }
         }
+
+        repositories.maven {
+            val repo = if (version.toString().endsWith("-SNAPSHOT")) "snapshots" else "releases"
+            url = uri("https://repo.siebrenvde.dev/${repo}/")
+            name = "siebrenvde"
+            credentials(PasswordCredentials::class)
+        }
     }
 }
-
-tasks.requireTagged { enabled = false }
-tasks.signMavenPublication { enabled = false }
 
 tasks.javadoc.configure {
     val options = options as StandardJavadocDocletOptions
