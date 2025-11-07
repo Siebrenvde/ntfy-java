@@ -52,6 +52,16 @@ final class BroadcastActionImpl extends AbstractAction implements BroadcastActio
         return Objects.hash(super.hashCode(), this.intent, this.extras);
     }
 
+    @Override
+    public String toString() {
+        return "BroadcastActionImpl{" +
+            "intent='" + this.intent + '\'' +
+            ", extras=" + this.extras +
+            ", label='" + this.label() + '\'' +
+            ", clear=" + this.clear() +
+            '}';
+    }
+
     static class BuilderImpl implements BroadcastAction.Builder {
 
         private final String label;

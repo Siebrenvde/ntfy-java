@@ -298,6 +298,17 @@ sealed class TopicImpl implements Topic permits TopicImpl.Protected {
         return Objects.hash(this.host, this.name, this.uri, this.client, this.timeout);
     }
 
+    @Override
+    public String toString() {
+        return "TopicImpl{" +
+            "host='" + this.host + '\'' +
+            ", name='" + this.name + '\'' +
+            ", uri=" + this.uri +
+            ", client=" + this.client +
+            ", timeout=" + this.timeout +
+            '}';
+    }
+
     static final class Protected extends TopicImpl {
 
         @VisibleForTesting final String header;

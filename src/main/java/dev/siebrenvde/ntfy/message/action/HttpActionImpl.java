@@ -69,6 +69,18 @@ final class HttpActionImpl extends AbstractAction implements HttpAction {
         return Objects.hash(super.hashCode(), this.url, this.method, this.headers, this.body);
     }
 
+    @Override
+    public String toString() {
+        return "HttpActionImpl{" +
+            "url='" + this.url + '\'' +
+            ", method=" + this.method +
+            ", headers=" + this.headers +
+            ", body='" + this.body + '\'' +
+            ", label='" + this.label() + '\'' +
+            ", clear=" + this.clear() +
+            '}';
+    }
+
     static class BuilderImpl implements HttpAction.Builder {
 
         private final String label;

@@ -41,4 +41,13 @@ final class ViewActionImpl extends AbstractAction implements ViewAction {
         return Objects.hash(super.hashCode(), this.url);
     }
 
+    @Override
+    public String toString() {
+        return "ViewActionImpl{" +
+            "url='" + this.url + '\'' +
+            ", label='" + this.label() + '\'' +
+            ", clear=" + this.clear() +
+            '}';
+    }
+
 }
