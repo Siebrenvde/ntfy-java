@@ -1,6 +1,6 @@
 package dev.siebrenvde.ntfy.internal;
 
-// {# @pebvariable name="version" type="java.lang.String" #}
+{# @pebvariable name="version" type="java.lang.String" #}
 
 /**
 * Compile-time values
