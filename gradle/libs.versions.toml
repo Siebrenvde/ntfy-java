@@ -1,6 +1,6 @@
 [versions]
 indra = "4.0.0"
-checkstyle = "12.3.0"
+checkstyle = "12.3.1"
 junit = "6.0.1"
 
 [libraries]
