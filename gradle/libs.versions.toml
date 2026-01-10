@@ -25,3 +25,4 @@ indra = { id = "net.kyori.indra", version.ref = "indra" }
 indra-checkstyle = { id = "net.kyori.indra.checkstyle", version.ref = "indra" }
 blossom = { id = "net.kyori.blossom", version = "2.2.0" }
 errorprone = { id = "net.ltgt.errorprone", version = "4.4.0" }
+publisher = { id = "dev.siebrenvde.publisher", version = "1.0.0" }
