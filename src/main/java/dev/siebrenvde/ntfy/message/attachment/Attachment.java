@@ -20,6 +20,7 @@ public sealed interface Attachment permits FileAttachment, UrlAttachment {
      * @return a url attachment
      * @see <a href="https://docs.ntfy.sh/publish/#attach-file-from-a-url">Attach file from a URL</a>
      */
+    @Contract(value = "_, _ -> new", pure = true)
     static UrlAttachment url(final String url, @Nullable final String fileName) {
         return new UrlAttachmentImpl(url, fileName);
     }
@@ -31,6 +32,7 @@ public sealed interface Attachment permits FileAttachment, UrlAttachment {
      * @return a url attachment
      * @see <a href="https://docs.ntfy.sh/publish/#attach-file-from-a-url">Attach file from a URL</a>
      */
+    @Contract(value = "_ -> new", pure = true)
     static UrlAttachment url(final String url) {
         return new UrlAttachmentImpl(url, null);
     }
@@ -43,6 +45,7 @@ public sealed interface Attachment permits FileAttachment, UrlAttachment {
      * @return a file attachment
      * @see <a href="https://docs.ntfy.sh/publish/#attach-local-file">Attach local file</a>
      */
+    @Contract(value = "_, _ -> new", pure = true)
     static FileAttachment file(final Path file, @Nullable final String fileName) {
         return new FileAttachmentImpl(file, fileName);
     }
@@ -54,6 +57,7 @@ public sealed interface Attachment permits FileAttachment, UrlAttachment {
      * @return a file attachment
      * @see <a href="https://docs.ntfy.sh/publish/#attach-local-file">Attach local file</a>
      */
+    @Contract(value = "_ -> new", pure = true)
     static FileAttachment file(final Path file) {
         return new FileAttachmentImpl(file, null);
     }
