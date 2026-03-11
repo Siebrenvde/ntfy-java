@@ -81,7 +81,7 @@ final class HttpActionImpl extends AbstractAction implements HttpAction {
             '}';
     }
 
-    static class BuilderImpl implements HttpAction.Builder {
+    static final class BuilderImpl implements HttpAction.Builder {
 
         private final String label;
         private final String url;

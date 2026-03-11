@@ -7,7 +7,7 @@ import com.google.gson.stream.JsonWriter;
 import java.io.IOException;
 import java.time.Instant;
 
-class InstantAdapter extends TypeAdapter<Instant> {
+final class InstantAdapter extends TypeAdapter<Instant> {
 
     @Override
     public void write(final JsonWriter out, final Instant value) throws IOException {

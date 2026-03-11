@@ -245,7 +245,7 @@ public sealed interface Message permits MessageImpl {
          * @see <a href="https://docs.ntfy.sh/publish/#action-buttons">Action buttons</a>
          */
         @Contract(value = "_ -> this", mutates = "this")
-        Builder actions(List<Action> actions);
+        Builder actions(List<? extends Action> actions);
 
         /**
          * Adds an action

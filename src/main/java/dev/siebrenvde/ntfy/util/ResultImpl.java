@@ -6,7 +6,7 @@ import java.util.function.Function;
 
 import static dev.siebrenvde.ntfy.internal.Util.checkNotNull;
 
-class ResultImpl {
+final class ResultImpl {
 
     record Success<VALUE, ERROR>(VALUE _value) implements Result<VALUE, ERROR> {
 
@@ -84,6 +84,10 @@ class ResultImpl {
             errorConsumer.accept(this._error);
             return this;
         }
+
+    }
+
+    private ResultImpl() {
 
     }
 

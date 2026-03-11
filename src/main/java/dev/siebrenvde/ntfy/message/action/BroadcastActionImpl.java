@@ -62,7 +62,7 @@ final class BroadcastActionImpl extends AbstractAction implements BroadcastActio
             '}';
     }
 
-    static class BuilderImpl implements BroadcastAction.Builder {
+    static final class BuilderImpl implements BroadcastAction.Builder {
 
         private final String label;
         private String intent = DEFAULT_INTENT;

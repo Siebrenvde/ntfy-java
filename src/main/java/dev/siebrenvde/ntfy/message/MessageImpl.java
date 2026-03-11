@@ -116,7 +116,7 @@ record MessageImpl(
         }
 
         @Override
-        public Builder actions(final List<Action> actions) {
+        public Builder actions(final List<? extends Action> actions) {
             checkNotNull(actions, "actions");
             for (final Action action : actions) checkNotNull(action, "action in actions");
             this.actions = new ArrayList<>(actions);

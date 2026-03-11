@@ -65,7 +65,7 @@ public sealed interface HttpAction extends Action permits HttpActionImpl {
     /**
      * Builder for {@link HttpAction}
      */
-    interface Builder {
+    sealed interface Builder permits HttpActionImpl.BuilderImpl {
 
         /**
          * Sets the request method

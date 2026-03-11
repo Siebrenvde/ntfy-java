@@ -59,7 +59,7 @@ sealed class TopicImpl implements Topic permits TopicImpl.Protected {
             this.uri = new URI(host).resolve(name);
             //noinspection ResultOfMethodCallIgnored
             this.uri.toURL();
-        } catch (final URISyntaxException | MalformedURLException e) {
+        } catch (final URISyntaxException | MalformedURLException | IllegalArgumentException e) {
             throw new IllegalArgumentException("invalid topic '" + name + "'", e);
         }
         this.client = client;
@@ -147,11 +147,11 @@ sealed class TopicImpl implements Topic permits TopicImpl.Protected {
         builder.header("User-Agent", USER_AGENT);
 
         if (message.body() != null) {
-            builder.header("Message", this.encodeBase64(message.body()));
+            builder.header("Message", encodeBase64(message.body()));
         }
 
         if (message.title() != null) {
-            builder.header("Title", this.encodeBase64(message.title()));
+            builder.header("Title", encodeBase64(message.title()));
         }
 
         if (message.priority() != Priority.DEFAULT) {
@@ -159,7 +159,7 @@ sealed class TopicImpl implements Topic permits TopicImpl.Protected {
         }
 
         if (!message.tags().isEmpty()) {
-            builder.header("Tags", this.encodeBase64(String.join(",", message.tags())));
+            builder.header("Tags", encodeBase64(String.join(",", message.tags())));
         }
 
         if (message.markdown()) {
@@ -215,27 +215,27 @@ sealed class TopicImpl implements Topic permits TopicImpl.Protected {
                 ));
             }
 
-            builder.header("Actions", this.encodeBase64(String.join(";", actions)));
+            builder.header("Actions", encodeBase64(String.join(";", actions)));
         }
 
         if (message.clickAction() != null) {
-            builder.header("Click", this.encodeBase64(message.clickAction()));
+            builder.header("Click", encodeBase64(message.clickAction()));
         }
 
         final Attachment attachment = message.attachment();
         if (attachment != null) {
             if (attachment.fileName() != null) {
-                builder.header("Filename", this.encodeBase64(attachment.fileName()));
+                builder.header("Filename", encodeBase64(attachment.fileName()));
             }
 
             if (attachment instanceof final UrlAttachment url) {
-                builder.header("Attach", this.encodeBase64(url.url()));
+                builder.header("Attach", encodeBase64(url.url()));
                 builder.POST(BodyPublishers.noBody());
             } else if (attachment instanceof final FileAttachment file) {
                 builder.PUT(BodyPublishers.ofFile(file.file()));
 
                 if (file.fileName() == null) {
-                    builder.header("Filename", this.encodeBase64(file.file().getFileName().toString()));
+                    builder.header("Filename", encodeBase64(file.file().getFileName().toString()));
                 }
             }
         } else {
@@ -243,15 +243,15 @@ sealed class TopicImpl implements Topic permits TopicImpl.Protected {
         }
 
         if (message.icon() != null) {
-            builder.header("Icon", this.encodeBase64(message.icon()));
+            builder.header("Icon", encodeBase64(message.icon()));
         }
 
         if (message.email() != null) {
-            builder.header("Email", this.encodeBase64(message.email()));
+            builder.header("Email", encodeBase64(message.email()));
         }
 
         if (message.phone() != null) {
-            builder.header("Call", this.encodeBase64(message.phone()));
+            builder.header("Call", encodeBase64(message.phone()));
         }
 
         if (!message.cache()) {
@@ -277,7 +277,7 @@ sealed class TopicImpl implements Topic permits TopicImpl.Protected {
         return builder.build();
     }
 
-    private String encodeBase64(final String input) {
+    private static String encodeBase64(final String input) {
         for (int i = 0; i < input.length(); i++) {
             final int c = input.codePointAt(i);
             if (c < 32 || c > 126) {
@@ -339,7 +339,7 @@ sealed class TopicImpl implements Topic permits TopicImpl.Protected {
 
     static final class BuilderImpl implements Topic.Builder {
 
-        private String host = Topic.DEFAULT_HOST;
+        private String host = DEFAULT_HOST;
         private final String name;
         private HttpClient client = DEFAULT_CLIENT;
         private @Nullable Duration timeout;

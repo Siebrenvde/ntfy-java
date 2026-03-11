@@ -37,7 +37,7 @@ public sealed interface BroadcastAction extends Action permits BroadcastActionIm
     /**
      * Builder for {@link BroadcastAction}
      */
-    interface Builder {
+    sealed interface Builder permits BroadcastActionImpl.BuilderImpl {
 
         /**
          * Sets the intent
