@@ -10,7 +10,7 @@ gson = "com.google.code.gson:gson:2.14.0"
 
 # ErrorProne
 errorprone = "com.google.errorprone:error_prone_core:2.49.0"
-nullaway = "com.uber.nullaway:nullaway:0.13.4"
+nullaway = "com.uber.nullaway:nullaway:0.14.1"
 
 # Testing
 junit-jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junit" }
