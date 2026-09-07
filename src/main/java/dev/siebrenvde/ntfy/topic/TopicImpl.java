@@ -1,6 +1,8 @@
 package dev.siebrenvde.ntfy.topic;
 
+import dev.siebrenvde.ntfy.exception.NtfyException;
 import dev.siebrenvde.ntfy.internal.BuildParameters;
+import dev.siebrenvde.ntfy.internal.ErrorResponse;
 import dev.siebrenvde.ntfy.message.Message;
 import dev.siebrenvde.ntfy.message.Priority;
 import dev.siebrenvde.ntfy.message.action.Action;
@@ -10,9 +12,7 @@ import dev.siebrenvde.ntfy.message.action.ViewAction;
 import dev.siebrenvde.ntfy.message.attachment.Attachment;
 import dev.siebrenvde.ntfy.message.attachment.FileAttachment;
 import dev.siebrenvde.ntfy.message.attachment.UrlAttachment;
-import dev.siebrenvde.ntfy.response.ErrorResponse;
 import dev.siebrenvde.ntfy.response.PublishResponse;
-import dev.siebrenvde.ntfy.util.Result;
 import org.jetbrains.annotations.VisibleForTesting;
 import org.jspecify.annotations.Nullable;
 
@@ -77,32 +77,32 @@ sealed class TopicImpl implements Topic permits TopicImpl.Protected {
     }
 
     @Override
-    public Result<PublishResponse, ErrorResponse> publish(final Message message) throws IOException, InterruptedException {
+    public PublishResponse publish(final Message message) throws IOException, InterruptedException {
         return this.sendRequest(message, null);
     }
 
     @Override
-    public Result<PublishResponse, ErrorResponse> scheduleAt(final Message message, final Instant time) throws IOException, InterruptedException {
+    public PublishResponse scheduleAt(final Message message, final Instant time) throws IOException, InterruptedException {
         return this.sendRequest(message, time);
     }
 
     @Override
-    public Result<PublishResponse, ErrorResponse> scheduleIn(final Message message, final long delay, final TemporalUnit unit) throws IOException, InterruptedException {
+    public PublishResponse scheduleIn(final Message message, final long delay, final TemporalUnit unit) throws IOException, InterruptedException {
         return this.sendRequest(message, Instant.now().plus(delay, unit));
     }
 
     @Override
-    public CompletableFuture<Result<PublishResponse, ErrorResponse>> publishAsync(final Message message) {
+    public CompletableFuture<PublishResponse> publishAsync(final Message message) {
         return this.sendRequestAsync(message, null);
     }
 
     @Override
-    public CompletableFuture<Result<PublishResponse, ErrorResponse>> scheduleAtAsync(final Message message, final Instant time) {
+    public CompletableFuture<PublishResponse> scheduleAtAsync(final Message message, final Instant time) {
         return this.sendRequestAsync(message, time);
     }
 
     @Override
-    public CompletableFuture<Result<PublishResponse, ErrorResponse>> scheduleInAsync(final Message message, final long delay, final TemporalUnit unit) {
+    public CompletableFuture<PublishResponse> scheduleInAsync(final Message message, final long delay, final TemporalUnit unit) {
         return this.sendRequestAsync(message, Instant.now().plus(delay, unit));
     }
 
@@ -114,16 +114,17 @@ sealed class TopicImpl implements Topic permits TopicImpl.Protected {
             .timeout(this.timeout);
     }
 
-    private Result<PublishResponse, ErrorResponse> sendRequest(final Message message, @Nullable final Instant time) throws IOException, InterruptedException {
+    private PublishResponse sendRequest(final Message message, @Nullable final Instant time) throws IOException, InterruptedException {
         final HttpResponse<String> response = this.client.send(this.createRequest(message, time), BodyHandlers.ofString());
-        if (response.statusCode() == 200) {
-            return Result.success(PublishResponse.fromJson(response.body()));
-        } else {
-            return Result.error(ErrorResponse.fromJson(response.body()));
+
+        if (response.statusCode() != 200) {
+            throw new NtfyException(ErrorResponse.fromJson(response.body()));
         }
+
+        return PublishResponse.fromJson(response.body());
     }
 
-    private CompletableFuture<Result<PublishResponse, ErrorResponse>> sendRequestAsync(final Message message, @Nullable final Instant time) {
+    private CompletableFuture<PublishResponse> sendRequestAsync(final Message message, @Nullable final Instant time) {
         final HttpRequest request;
         try {
             request = this.createRequest(message, time);
@@ -132,11 +133,11 @@ sealed class TopicImpl implements Topic permits TopicImpl.Protected {
         }
         return this.client.sendAsync(request, BodyHandlers.ofString())
             .thenApply(response -> {
-                if (response.statusCode() == 200) {
-                    return Result.success(PublishResponse.fromJson(response.body()));
-                } else {
-                    return Result.error(ErrorResponse.fromJson(response.body()));
+                if (response.statusCode() != 200) {
+                    throw new NtfyException(ErrorResponse.fromJson(response.body()));
                 }
+
+                return PublishResponse.fromJson(response.body());
             });
     }
 

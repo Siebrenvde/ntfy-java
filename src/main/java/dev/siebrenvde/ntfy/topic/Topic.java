@@ -1,9 +1,8 @@
 package dev.siebrenvde.ntfy.topic;
 
+import dev.siebrenvde.ntfy.exception.NtfyException;
 import dev.siebrenvde.ntfy.message.Message;
-import dev.siebrenvde.ntfy.response.ErrorResponse;
 import dev.siebrenvde.ntfy.response.PublishResponse;
-import dev.siebrenvde.ntfy.util.Result;
 import org.jetbrains.annotations.Contract;
 import org.jspecify.annotations.Nullable;
 
@@ -50,19 +49,21 @@ public sealed interface Topic permits TopicImpl {
      * Publishes a message to the topic
      *
      * @param message the message
-     * @return a {@link Result} with either a {@link PublishResponse} or an {@link ErrorResponse}
+     * @return a {@link PublishResponse}
+     * @throws NtfyException if the server returns an error
      * @throws FileNotFoundException if the file for a file attachment was not found
      */
-    Result<PublishResponse, ErrorResponse> publish(Message message) throws IOException, InterruptedException;
+    PublishResponse publish(Message message) throws IOException, InterruptedException;
 
     /**
      * Publishes a message to the topic
      *
      * @param builder the message builder
-     * @return a {@link Result} with either a {@link PublishResponse} or an {@link ErrorResponse}
+     * @return a {@link PublishResponse}
+     * @throws NtfyException if the server returns an error
      * @throws FileNotFoundException if the file for a file attachment was not found
      */
-    default Result<PublishResponse, ErrorResponse> publish(final Message.Builder builder) throws IOException, InterruptedException {
+    default PublishResponse publish(final Message.Builder builder) throws IOException, InterruptedException {
         return this.publish(builder.build());
     }
 
@@ -70,10 +71,11 @@ public sealed interface Topic permits TopicImpl {
      * Publishes a message to the topic
      *
      * @param message the message
-     * @return a {@link Result} with either a {@link PublishResponse} or an {@link ErrorResponse}
+     * @return a {@link PublishResponse}
+     * @throws NtfyException if the server returns an error
      * @throws FileNotFoundException if the file for a file attachment was not found
      */
-    default Result<PublishResponse, ErrorResponse> publish(final String message) throws IOException, InterruptedException {
+    default PublishResponse publish(final String message) throws IOException, InterruptedException {
         return this.publish(Message.message(message));
     }
 
@@ -82,22 +84,24 @@ public sealed interface Topic permits TopicImpl {
      *
      * @param message the message
      * @param time the time
-     * @return a {@link Result} with either a {@link PublishResponse} or an {@link ErrorResponse}
+     * @return a {@link PublishResponse}
+     * @throws NtfyException if the server returns an error
      * @throws FileNotFoundException if the file for a file attachment was not found
      * @see <a href="https://docs.ntfy.sh/publish/#scheduled-delivery">Scheduled delivery</a>
      */
-    Result<PublishResponse, ErrorResponse> scheduleAt(Message message, Instant time) throws IOException, InterruptedException;
+    PublishResponse scheduleAt(Message message, Instant time) throws IOException, InterruptedException;
 
     /**
      * Schedules a message to be published to the topic at a specified time
      *
      * @param builder the message builder
      * @param time the time
-     * @return a {@link Result} with either a {@link PublishResponse} or an {@link ErrorResponse}
+     * @return a {@link PublishResponse}
+     * @throws NtfyException if the server returns an error
      * @throws FileNotFoundException if the file for a file attachment was not found
      * @see <a href="https://docs.ntfy.sh/publish/#scheduled-delivery">Scheduled delivery</a>
      */
-    default Result<PublishResponse, ErrorResponse> scheduleAt(final Message.Builder builder, final Instant time) throws IOException, InterruptedException {
+    default PublishResponse scheduleAt(final Message.Builder builder, final Instant time) throws IOException, InterruptedException {
         return this.scheduleAt(builder.build(), time);
     }
 
@@ -106,11 +110,12 @@ public sealed interface Topic permits TopicImpl {
      *
      * @param message the message
      * @param time the time
-     * @return a {@link Result} with either a {@link PublishResponse} or an {@link ErrorResponse}
+     * @return a {@link PublishResponse}
+     * @throws NtfyException if the server returns an error
      * @throws FileNotFoundException if the file for a file attachment was not found
      * @see <a href="https://docs.ntfy.sh/publish/#scheduled-delivery">Scheduled delivery</a>
      */
-    default Result<PublishResponse, ErrorResponse> scheduleAt(final String message, final Instant time) throws IOException, InterruptedException {
+    default PublishResponse scheduleAt(final String message, final Instant time) throws IOException, InterruptedException {
         return this.scheduleAt(Message.message(message), time);
     }
 
@@ -120,11 +125,12 @@ public sealed interface Topic permits TopicImpl {
      * @param message the message
      * @param delay the delay
      * @param unit the temporal unit the delay is in
-     * @return a {@link Result} with either a {@link PublishResponse} or an {@link ErrorResponse}
+     * @return a {@link PublishResponse}
+     * @throws NtfyException if the server returns an error
      * @throws FileNotFoundException if the file for a file attachment was not found
      * @see <a href="https://docs.ntfy.sh/publish/#scheduled-delivery">Scheduled delivery</a>
      */
-    Result<PublishResponse, ErrorResponse> scheduleIn(Message message, long delay, TemporalUnit unit) throws IOException, InterruptedException;
+    PublishResponse scheduleIn(Message message, long delay, TemporalUnit unit) throws IOException, InterruptedException;
 
     /**
      * Schedules a message to be published to the topic after a specified delay
@@ -132,11 +138,12 @@ public sealed interface Topic permits TopicImpl {
      * @param builder the message builder
      * @param delay the delay
      * @param unit the temporal unit the delay is in
-     * @return a {@link Result} with either a {@link PublishResponse} or an {@link ErrorResponse}
+     * @return a {@link PublishResponse}
+     * @throws NtfyException if the server returns an error
      * @throws FileNotFoundException if the file for a file attachment was not found
      * @see <a href="https://docs.ntfy.sh/publish/#scheduled-delivery">Scheduled delivery</a>
      */
-    default Result<PublishResponse, ErrorResponse> scheduleIn(final Message.Builder builder, final long delay, final TemporalUnit unit) throws IOException, InterruptedException {
+    default PublishResponse scheduleIn(final Message.Builder builder, final long delay, final TemporalUnit unit) throws IOException, InterruptedException {
         return this.scheduleIn(builder.build(), delay, unit);
     }
 
@@ -146,11 +153,12 @@ public sealed interface Topic permits TopicImpl {
      * @param message the message
      * @param delay the delay
      * @param unit the temporal unit the delay is in
-     * @return a {@link Result} with either a {@link PublishResponse} or an {@link ErrorResponse}
+     * @return a {@link PublishResponse}
+     * @throws NtfyException if the server returns an error
      * @throws FileNotFoundException if the file for a file attachment was not found
      * @see <a href="https://docs.ntfy.sh/publish/#scheduled-delivery">Scheduled delivery</a>
      */
-    default Result<PublishResponse, ErrorResponse> scheduleIn(final String message, final long delay, final TemporalUnit unit) throws IOException, InterruptedException {
+    default PublishResponse scheduleIn(final String message, final long delay, final TemporalUnit unit) throws IOException, InterruptedException {
         return this.scheduleIn(Message.message(message), delay, unit);
     }
 
@@ -158,17 +166,17 @@ public sealed interface Topic permits TopicImpl {
      * Asynchronously publishes a message to the topic
      *
      * @param message the message
-     * @return a {@link Result} with either a {@link PublishResponse} or an {@link ErrorResponse}
+     * @return a {@link PublishResponse}
      */
-    CompletableFuture<Result<PublishResponse, ErrorResponse>> publishAsync(Message message);
+    CompletableFuture<PublishResponse> publishAsync(Message message);
 
     /**
      * Asynchronously publishes a message to the topic
      *
      * @param builder the message builder
-     * @return a {@link Result} with either a {@link PublishResponse} or an {@link ErrorResponse}
+     * @return a {@link PublishResponse}
      */
-    default CompletableFuture<Result<PublishResponse, ErrorResponse>> publishAsync(final Message.Builder builder) {
+    default CompletableFuture<PublishResponse> publishAsync(final Message.Builder builder) {
         return this.publishAsync(builder.build());
     }
 
@@ -176,9 +184,9 @@ public sealed interface Topic permits TopicImpl {
      * Asynchronously publishes a message to the topic
      *
      * @param message the message
-     * @return a {@link Result} with either a {@link PublishResponse} or an {@link ErrorResponse}
+     * @return a {@link PublishResponse}
      */
-    default CompletableFuture<Result<PublishResponse, ErrorResponse>> publishAsync(final String message) {
+    default CompletableFuture<PublishResponse> publishAsync(final String message) {
         return this.publishAsync(Message.message(message));
     }
 
@@ -187,20 +195,20 @@ public sealed interface Topic permits TopicImpl {
      *
      * @param message the message
      * @param time the time
-     * @return a {@link Result} with either a {@link PublishResponse} or an {@link ErrorResponse}
+     * @return a {@link PublishResponse}
      * @see <a href="https://docs.ntfy.sh/publish/#scheduled-delivery">Scheduled delivery</a>
      */
-    CompletableFuture<Result<PublishResponse, ErrorResponse>> scheduleAtAsync(Message message, Instant time);
+    CompletableFuture<PublishResponse> scheduleAtAsync(Message message, Instant time);
 
     /**
      * Asynchronously schedules a message to be published to the topic at a specified time
      *
      * @param builder the message builder
      * @param time the time
-     * @return a {@link Result} with either a {@link PublishResponse} or an {@link ErrorResponse}
+     * @return a {@link PublishResponse}
      * @see <a href="https://docs.ntfy.sh/publish/#scheduled-delivery">Scheduled delivery</a>
      */
-    default CompletableFuture<Result<PublishResponse, ErrorResponse>> scheduleAtAsync(final Message.Builder builder, final Instant time) {
+    default CompletableFuture<PublishResponse> scheduleAtAsync(final Message.Builder builder, final Instant time) {
         return this.scheduleAtAsync(builder.build(), time);
     }
 
@@ -209,10 +217,10 @@ public sealed interface Topic permits TopicImpl {
      *
      * @param message the message
      * @param time the time
-     * @return a {@link Result} with either a {@link PublishResponse} or an {@link ErrorResponse}
+     * @return a {@link PublishResponse}
      * @see <a href="https://docs.ntfy.sh/publish/#scheduled-delivery">Scheduled delivery</a>
      */
-    default CompletableFuture<Result<PublishResponse, ErrorResponse>> scheduleAtAsync(final String message, final Instant time) {
+    default CompletableFuture<PublishResponse> scheduleAtAsync(final String message, final Instant time) {
         return this.scheduleAtAsync(Message.message(message), time);
     }
 
@@ -222,10 +230,10 @@ public sealed interface Topic permits TopicImpl {
      * @param message the message
      * @param delay the delay
      * @param unit the temporal unit the delay is in
-     * @return a {@link Result} with either a {@link PublishResponse} or an {@link ErrorResponse}
+     * @return a {@link PublishResponse}
      * @see <a href="https://docs.ntfy.sh/publish/#scheduled-delivery">Scheduled delivery</a>
      */
-    CompletableFuture<Result<PublishResponse, ErrorResponse>> scheduleInAsync(Message message, long delay, TemporalUnit unit);
+    CompletableFuture<PublishResponse> scheduleInAsync(Message message, long delay, TemporalUnit unit);
 
     /**
      * Asynchronously schedules a message to be published to the topic after a specified delay
@@ -233,10 +241,10 @@ public sealed interface Topic permits TopicImpl {
      * @param builder the message builder
      * @param delay the delay
      * @param unit the temporal unit the delay is in
-     * @return a {@link Result} with either a {@link PublishResponse} or an {@link ErrorResponse}
+     * @return a {@link PublishResponse}
      * @see <a href="https://docs.ntfy.sh/publish/#scheduled-delivery">Scheduled delivery</a>
      */
-    default CompletableFuture<Result<PublishResponse, ErrorResponse>> scheduleInAsync(final Message.Builder builder, final long delay, final TemporalUnit unit) {
+    default CompletableFuture<PublishResponse> scheduleInAsync(final Message.Builder builder, final long delay, final TemporalUnit unit) {
         return this.scheduleInAsync(builder.build(), delay, unit);
     }
 
@@ -246,10 +254,10 @@ public sealed interface Topic permits TopicImpl {
      * @param message the message
      * @param delay the delay
      * @param unit the temporal unit the delay is in
-     * @return a {@link Result} with either a {@link PublishResponse} or an {@link ErrorResponse}
+     * @return a {@link PublishResponse}
      * @see <a href="https://docs.ntfy.sh/publish/#scheduled-delivery">Scheduled delivery</a>
      */
-    default CompletableFuture<Result<PublishResponse, ErrorResponse>> scheduleInAsync(final String message, final long delay, final TemporalUnit unit) {
+    default CompletableFuture<PublishResponse> scheduleInAsync(final String message, final long delay, final TemporalUnit unit) {
         return this.scheduleInAsync(Message.message(message), delay, unit);
     }
 

@@ -12,7 +12,7 @@ module dev.siebrenvde.ntfy {
     exports dev.siebrenvde.ntfy.message.attachment;
     exports dev.siebrenvde.ntfy.response;
     exports dev.siebrenvde.ntfy.topic;
-    exports dev.siebrenvde.ntfy.util;
 
     opens dev.siebrenvde.ntfy.response to com.google.gson;
+    opens dev.siebrenvde.ntfy.internal to com.google.gson;
 }

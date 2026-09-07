@@ -1,4 +1,4 @@
 @NullMarked
-package dev.siebrenvde.ntfy.util;
+package dev.siebrenvde.ntfy.exception;
 
 import org.jspecify.annotations.NullMarked;
